@@ -29,7 +29,7 @@ AdvaJobs is a modern job advertisement platform that connects job seekers and em
    ```  
 2. Navigate to the frontend directory and install dependencies:  
    ```bash
-   cd frontend
+   cd client
    npm install
    ```  
 3. Run the backend services:  
@@ -61,11 +61,11 @@ AdvaJobs is a modern job advertisement platform that connects job seekers and em
 
 ## Team  
 
-- Pasith Senevirathna 
-- Supun Chamuditha
-- Anuttara Nirmani  
-- Chamudi  
-- Srimal Tharupathi
+- [Pasith Senevirathna](https://github.com/pasiths) 
+- [Supun Chamuditha](https://github.com/supunchamuditha)
+- [Anuttara Nirmani](https://github.com/AnuNirmani)  
+- [Chamudi Jayasinghe](https://github.com/cocsm/test-marge.git)  
+- [Srimal Tharupathi](https://github.com/srimalonlinez)
 
 ## License  
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.  
