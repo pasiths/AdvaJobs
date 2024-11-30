@@ -9,6 +9,9 @@ import Home from './Pages/HomePage';
 import PublishJobPage from './pages/PublishJobPage';
 import JobsPage from './pages/JobsPage';
 import UserLoginPage from './pages/UserLoginPage';
+import CompanyLoginPage from './pages/CompanyLoginPage';
+import UserRegisterPage from './pages/UserRegisterPage';
+import CompanyRegisterPage from './pages/CompanyRegisterPage';
 
 
 function App() {
@@ -24,6 +27,10 @@ function App() {
       <Route path="/userlogin" element={<UserLoginPage />} />
       
 
+      <Route path="/companylogin" element={<CompanyLoginPage />} />
+      <Route path="/register" element={<UserRegisterPage />} />
+      <Route path="/companyregister" element={<CompanyRegisterPage />} />
+      
       </Routes>
       <Footer />
     </Router>
