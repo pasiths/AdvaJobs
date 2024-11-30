@@ -8,6 +8,7 @@ import Footer from './Components/Navigation/Footer';
 import Home from './Pages/HomePage';
 import PublishJobPage from './pages/PublishJobPage';
 import JobsPage from './pages/JobsPage';
+import UserLoginPage from './pages/UserLoginPage';
 
 
 function App() {
@@ -20,6 +21,8 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/publishjob" element={<PublishJobPage />} />
       <Route path="/jobs" element={<JobsPage />} />
+      <Route path="/userlogin" element={<UserLoginPage />} />
+      
 
       </Routes>
       <Footer />
