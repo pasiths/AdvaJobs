@@ -8,11 +8,11 @@
 		<version>3.4.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com</groupId>
+	<groupId>com.user</groupId>
 	<artifactId>user_service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>user_service</name>
-	<description>user_service</description>
+	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -49,6 +49,8 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+
 	</dependencies>
 
 	<build>
