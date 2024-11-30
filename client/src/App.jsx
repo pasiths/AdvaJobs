@@ -12,6 +12,8 @@ import UserLoginPage from './pages/UserLoginPage';
 import CompanyLoginPage from './pages/CompanyLoginPage';
 import UserRegisterPage from './pages/UserRegisterPage';
 import CompanyRegisterPage from './pages/CompanyRegisterPage';
+import JobDetailPage from './pages/JobDetailPage';
+import JobApplicationPage from './pages/JobApplicationPage';
 
 
 function App() {
@@ -25,11 +27,12 @@ function App() {
       <Route path="/publishjob" element={<PublishJobPage />} />
       <Route path="/jobs" element={<JobsPage />} />
       <Route path="/userlogin" element={<UserLoginPage />} />
-      
-
       <Route path="/companylogin" element={<CompanyLoginPage />} />
       <Route path="/register" element={<UserRegisterPage />} />
       <Route path="/companyregister" element={<CompanyRegisterPage />} />
+      <Route path="/jobdetails" element={<JobDetailPage />} />
+      <Route path="/applypage" element={<JobApplicationPage />} />
+      
       
       </Routes>
       <Footer />

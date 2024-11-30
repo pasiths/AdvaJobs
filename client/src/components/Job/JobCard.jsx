@@ -17,7 +17,7 @@ const JobCard = ({ job }) => {
           <small>{job.timeAgo}</small>
           <div className="d-flex justify-content-between mt-2">
             <small>{job.location}</small>
-            <a href="/jobAdPage">View Details</a>
+            <a href="/jobdetails">View Details</a>
           </div>
         </Col>
       </Row>

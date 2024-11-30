@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom'; // Import NavLink from react-router-
 
 function NavScrollExample() {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="bg-body-tertiary ">
       <Container fluid>
         <Navbar.Brand href="/">SKILLED</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
