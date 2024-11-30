@@ -19,8 +19,8 @@ function NavScrollExample() {
           <Nav className="ms-auto">
             {/* Profile icon as an example */}
             <Nav className="ms-auto">
-              <Button as={NavLink} to="/loginRec" variant="outline-primary" className="me-2">Recruiter Login</Button>
-              <Button as={NavLink} to="/login" variant="outline-success">Job Seeker Login</Button>
+              <Button as={NavLink} to="/companylogin" variant="outline-primary" className="me-2">Company Login</Button>
+              <Button as={NavLink} to="/userlogin" variant="outline-success">Job Seeker Login</Button>
             </Nav>
             {/* <Nav.Link as={NavLink} to="/profile">
               Profile
