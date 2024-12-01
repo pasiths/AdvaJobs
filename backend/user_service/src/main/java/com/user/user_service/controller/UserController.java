@@ -37,4 +37,9 @@ public class UserController {
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
+
+    @DeleteMapping(path = "/users/auth/{id}")
+    public boolean deleteUser(@PathVariable int id) {
+        return userService.deleteUser(id);
+    }
 }

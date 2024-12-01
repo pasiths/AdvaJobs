@@ -68,4 +68,18 @@ public class UserService {
         us.setStatus(1);
         return userRepo.save(us);
     }
+
+    public boolean deleteUser(int id){
+        User user = userRepo.findById(id).orElse(null);
+        if(user != null){
+            userRepo.delete(user);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean deleteUser(User user){
+        userRepo.delete(user);
+        return true;
+    }
 }
