@@ -1,4 +1,5 @@
 import { Card, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const JobCard = ({ job }) => {
   return (
@@ -17,7 +18,7 @@ const JobCard = ({ job }) => {
           <small>{job.timeAgo}</small>
           <div className="d-flex justify-content-between mt-2">
             <small>{job.location}</small>
-            <a href="/jobdetails">View Details</a>
+            <Link to="/jobdetail">View Details</Link>
           </div>
         </Col>
       </Row>

@@ -2,11 +2,11 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { NavLink } from 'react-router-dom'; // Import NavLink from react-router-dom
-import advajobs from '../../../public/advajobs.svg';
+import advajobs from '../../../src/assets/advajobs.svg';
 
 function NavScrollExample() {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary ">
+    <Navbar expand="lg" className="bg-body-tertiary fixed-top shadow-sm ">
       <Container fluid>
       <Navbar.Brand href="/"><img
         src={advajobs}

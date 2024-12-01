@@ -1,4 +1,6 @@
-const PremiumAdvertisementCard = () => {
+import { Link } from "react-router-dom";
+
+const LatestAdvertisementCard = () => {
   return (
     <div className="col-md-4 mb-4">
       <div className="premium-ad p-3 border rounded text-center">
@@ -10,13 +12,13 @@ const PremiumAdvertisementCard = () => {
         <h5>JOB TITLE</h5>
         <p>Company Name</p>
         <p>Location</p>
-        <a href="/jobAdPage" className="text-primary">
+        <Link to="/jobdetail" className="text-primary">
           VIEW DETAILS
-        </a>
+        </Link>
         <p>2 hours ago</p>
       </div>
     </div>
   );
 };
 
-export default PremiumAdvertisementCard;
+export default LatestAdvertisementCard;

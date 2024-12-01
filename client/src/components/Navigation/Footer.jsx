@@ -34,31 +34,6 @@ const Footer = () => {
               </p>
             </div>
           </div>
-  
-          {/* Email and Message Form */}
-          <div className="row">
-            <div className="col-md-5 mb-3" >
-              <input
-                type="email"
-                className="form-control border-0 custom-placeholder"
-                placeholder="Email"
-                style={{ backgroundColor: '#144B7D',opacity: '1',color: 'white'}}
-              />
-            </div>
-  
-            <div className="col-md-5 mb-3">
-              <input
-                type="text"
-                className="form-control border-0 custom-placeholder "
-                placeholder="Leave us a message"
-                style={{ backgroundColor: '#144B7D',opacity: '1',color: 'white'}}
-              />
-            </div>
-  
-            <div className="col-md-2 mb-3">
-              <button className="btn btn-light w-100">Submit</button>
-            </div>
-          </div>
         </div>
       </footer>
       </>
