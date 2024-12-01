@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Background (Optional, if you need transparency, remove the rectangle) -->
+  <rect width="100" height="100" fill="white"/>
+
+  <!-- A Letter -->
+  <path d="M30,80 L50,20 L70,80 L60,80 L50,50 L40,80 Z" fill="black" />
+
+  <!-- J Letter -->
+  <path d="M50,50 L50,80 A10,10 0 0,1 40,90 L30,90 A20,20 0 0,0 50,70 Z" fill="black" />
+</svg>

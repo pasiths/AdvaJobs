@@ -3,7 +3,7 @@ const Banner = () => {
         <div className="banner d-flex justify-content-center align-items-center" style={{ height: '40vh', width: '100%' }}>
             <div className="banner d-flex justify-content-center align-items-center" style={{ height: '40vh', width: '60%' }}>
                 <div className="banner-content text-center">
-                    <h1>Welcome to SKILLED!</h1>
+                    <h1>Welcome to AdvaJobs!</h1>
                     <br />
                     <p>Your go-to platform for connecting talented professionals with exciting career opportunities.
                         Whether you&#39;re a job seeker looking to take the next step in your career or an employer searching for the perfect candidate,

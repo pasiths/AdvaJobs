@@ -2,12 +2,19 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { NavLink } from 'react-router-dom'; // Import NavLink from react-router-dom
+import advajobs from '../../../public/advajobs.svg';
 
 function NavScrollExample() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary ">
       <Container fluid>
-        <Navbar.Brand href="/">SKILLED</Navbar.Brand>
+      <Navbar.Brand href="/"><img
+        src={advajobs}
+        alt="Logo"
+        width="40"
+        height="40"
+        style={{ marginRight: "8px" }} // Adds spacing between the logo and text
+        />AdvaJobs</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="mx-auto my-2 my-lg-0" navbarScroll>

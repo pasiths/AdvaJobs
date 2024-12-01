@@ -8,9 +8,10 @@ const Footer = () => {
             {/* Text Section */}
             <div className="col-md-6 mb-3">
               <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+              At Advajobs, we strive to connect talented professionals with the best companies. 
+              Our platform has been designed to make job searching easier and more efficient for both job 
+              seekers and employers. Since our inception,. Whether fresh graduate or an experienced professional,
+               Advajobs is here to guide you through every step of your career journey.
               </p>
             </div>
   
@@ -27,7 +28,7 @@ const Footer = () => {
             <div className="col-md-3 mb-3">
               <h5>Say Hello..!</h5>
               <p>
-                Email: skilled@gmail.com<br />
+                Email: advajobs@gmail.com<br />
                 Address: It has survived not only five centuries,<br />
                 Phone: +94 77 123 4567
               </p>

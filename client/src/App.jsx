@@ -1,10 +1,9 @@
 import './App.css'
 import Navbar from './Components/Navigation/Navbar'
 import NavbarLogged from './Components/Navigation/NavbarLogged';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Footer from './Components/Navigation/Footer';
+import Footer from './components/Navigation/Footer';
 import Home from './Pages/HomePage';
 import PublishJobPage from './pages/PublishJobPage';
 import JobsPage from './pages/JobsPage';
