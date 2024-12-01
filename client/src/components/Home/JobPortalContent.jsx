@@ -1,4 +1,4 @@
-import PremiumAdvertisementCard from './PremiumAdvertisementCard';
+import LatestAdvertisementCard from './LatestAdvertisementCard';
 import TopHiringCompaniesCard from './TopHiringCompaniesCard';
 import JobCategoriesCard from './JobCategoriesCard';
 
@@ -7,13 +7,10 @@ const JobPortalContent = () => {
     <div className="container mt-5">
       {/* Premium Advertisements Section */}
       <section>
-        <h3 className="mb-4">Premium Advertisements</h3>
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <div>Time ▼</div>
-        </div>
+        <h3 className="mb-4">Latest Advertisements</h3>
         <div className="row">
           {[...Array(6)].map((_, index) => (
-            <PremiumAdvertisementCard key={index} />
+            <LatestAdvertisementCard key={index} />
           ))}
         </div>
       </section>

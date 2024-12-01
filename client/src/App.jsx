@@ -13,13 +13,16 @@ import UserRegisterPage from './pages/UserRegisterPage';
 import CompanyRegisterPage from './pages/CompanyRegisterPage';
 import JobDetailPage from './pages/JobDetailPage';
 import JobApplicationPage from './pages/JobApplicationPage';
+import UserProfilePage from './pages/UserProfilePage';
+import ContactUs from './pages/ContactUsPage';
 
 
 function App() {
   return (
     <Router>
-      <Navbar />
+      {/* <Navbar /> */}
       <NavbarLogged />
+      <hr /><hr /><hr /><hr />
       <Routes>
 
       <Route path="/" element={<Home />} />
@@ -29,9 +32,11 @@ function App() {
       <Route path="/companylogin" element={<CompanyLoginPage />} />
       <Route path="/register" element={<UserRegisterPage />} />
       <Route path="/companyregister" element={<CompanyRegisterPage />} />
-      <Route path="/jobdetails" element={<JobDetailPage />} />
+      <Route path="/jobdetail" element={<JobDetailPage />} />
       <Route path="/applypage" element={<JobApplicationPage />} />
-      
+      <Route path="/profile" element={<UserProfilePage />} />
+      <Route path="/contact" element={<ContactUs />} />
+    
       
       </Routes>
       <Footer />

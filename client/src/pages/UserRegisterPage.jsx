@@ -16,7 +16,6 @@ const RegisterForm = () => {
     const [loading, setLoading] = useState(false);
     const [validationError, ] = useState('');
 
-    // Handle input change (placeholder implementation)
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -25,11 +24,9 @@ const RegisterForm = () => {
         }));
     };
 
-    // Handle form submission (placeholder implementation)
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        // Simulate a registration process
         setTimeout(() => {
             setLoading(false);
             console.log(formData);
