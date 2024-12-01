@@ -69,17 +69,28 @@ public class UserService {
         return userRepo.save(us);
     }
 
-    public boolean deleteUser(int id){
+    public boolean deleteUser(int id) {
         User user = userRepo.findById(id).orElse(null);
-        if(user != null){
+        if (user != null) {
             userRepo.delete(user);
             return true;
         }
         return false;
     }
 
-    public boolean deleteUser(User user){
+    public boolean deleteUser(User user) {
         userRepo.delete(user);
         return true;
+    }
+
+    public User loginUser(User user) {
+        User us= userRepo.getUsersByEmail(user.getEmail());
+        if (us != null) {
+            if (passwordEncoder.matches(user.getPassword(), us.getPassword())) {
+                return us;
+            }
+        }
+
+        return null;
     }
 }
