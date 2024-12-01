@@ -32,4 +32,9 @@ public class UserController {
     public User getUser(@PathVariable int id) {
         return userService.getUser(id);
     }
+
+    @PutMapping(path = "/users/auth/{id}")
+    public User updateUser(@PathVariable int id, @RequestBody User user) {
+        return userService.updateUser(id, user);
+    }
 }

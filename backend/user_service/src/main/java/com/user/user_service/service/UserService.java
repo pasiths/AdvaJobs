@@ -48,4 +48,24 @@ public class UserService {
     public User getUser(int id) {
         return userRepo.findById(id).orElse(null);
     }
+
+    public User updateUser(int id, User user) {
+        User us = new User();
+        us.setId(id);
+        us.setFullName(user.getFullName());
+        us.setEmail(user.getEmail());
+        us.setPhoneNum(user.getPhoneNum());
+        us.setLocation(user.getLocation());
+        us.setGender(user.getGender());
+        us.setCv("null");
+        us.setProfilePic("null");
+
+        // Hash the password before saving
+        us.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        us.setIsVerified("false");
+        us.setDate(LocalDateTime.now());
+        us.setStatus(1);
+        return userRepo.save(us);
+    }
 }
