@@ -3,6 +3,7 @@ package com.user.user_service.service;
 import com.user.user_service.data.User;
 import com.user.user_service.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public String apiTest() {
         return "Hello User";
@@ -27,7 +31,10 @@ public class UserService {
         us.setGender(user.getGender());
         us.setCv("null");
         us.setProfilePic("null");
-        us.setPassword(user.getPassword());
+
+        // Hash the password before saving
+        us.setPassword(passwordEncoder.encode(user.getPassword()));
+
         us.setIsVerified("false");
         us.setDate(LocalDateTime.now());
         us.setStatus(1);
