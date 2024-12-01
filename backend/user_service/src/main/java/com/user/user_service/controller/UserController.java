@@ -3,10 +3,7 @@ package com.user.user_service.controller;
 import com.user.user_service.data.User;
 import com.user.user_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,5 +26,10 @@ public class UserController {
     @GetMapping(path = "/users/auth")
     public List<User> getUsers() {
         return userService.getUsers();
+    }
+
+    @GetMapping(path = "/users/auth/{id}")
+    public User getUser(@PathVariable int id) {
+        return userService.getUser(id);
     }
 }
