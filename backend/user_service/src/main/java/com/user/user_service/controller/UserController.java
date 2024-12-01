@@ -15,6 +15,7 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
     @GetMapping(path = "/test")
     public String getTest() {
         return userService.apiTest();
