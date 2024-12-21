@@ -19,33 +19,40 @@ public class UserController {
         return userService.apiTest();
     }
 
-    @PostMapping(path = "/users/auth")
+    // register user
+    @PostMapping(path = "/users/")
     public User createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
+    // login user
+    @PostMapping(path = "/users/login")
+    public User login(@RequestBody User user) {
+        return userService.loginUser(user);
+    }
+
+    // get all users
     @GetMapping(path = "/users/auth")
     public List<User> getUsers() {
         return userService.getUsers();
     }
 
-    @GetMapping(path = "/users/auth/{id}")
+    // get user by id
+    @GetMapping(path = "/users/{id}")
     public User getUser(@PathVariable int id) {
         return userService.getUser(id);
     }
 
-    @PutMapping(path = "/users/auth/{id}")
+    // update user
+    @PutMapping(path = "/users/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
 
-    @DeleteMapping(path = "/users/auth/{id}")
+    // delete user
+    @DeleteMapping(path = "/users/{id}")
     public boolean deleteUser(@PathVariable int id) {
         return userService.deleteUser(id);
     }
 
-    @PostMapping(path = "/users/auth/login")
-    public User login(@RequestBody User user) {
-        return userService.loginUser(user);
-    }
 }
