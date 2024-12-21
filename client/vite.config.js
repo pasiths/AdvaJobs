@@ -6,10 +6,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    port: 3000,
+    port: Number(process.env.PORT) || 3000,
     proxy: {
       "/api": {
-        target: "http://localhost:3030/api", // Replace with your backend URL
+        target: process.env.VITE_API_URL, // Replace with your backend URL
         changeOrigin: true,
         // prependPath: true, // Ensure this is configured properly
         rewrite: (path) => path.replace(/^\/api/, ""),
