@@ -20,7 +20,7 @@ import ContactUs from './pages/ContactUsPage';
 function App() {
   return (
     <Router>
-      {/* <Navbar /> */}
+      <Navbar />
       <NavbarLogged />
       <hr /><hr /><hr /><hr />
       <Routes>

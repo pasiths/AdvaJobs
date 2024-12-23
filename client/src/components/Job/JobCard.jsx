@@ -1,5 +1,7 @@
+
 import { Card, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const JobCard = ({ job }) => {
   return (
@@ -24,6 +26,14 @@ const JobCard = ({ job }) => {
       </Row>
     </Card>
   );
+};
+JobCard.propTypes = {
+  job: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    company: PropTypes.string.isRequired,
+    timeAgo: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default JobCard;

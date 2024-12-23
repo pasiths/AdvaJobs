@@ -1,15 +1,23 @@
+import { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
 const ContactUs = () => {
+    const [name, setName] = useState("");  // Track Name
+    const [email, setEmail] = useState("");  // Track Email
+    const [subject, setSubject] = useState("");  // Track Subject
+    const [message, setMessage] = useState("");  // Track Message
+
+    // Handle form submission
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Simulate form submission
+        console.log('Message Sent:', { name, email, subject, message });
+    };
+
     return (
         <Container
-            fluid
             className="d-flex justify-content-center align-items-center"
-            style={{
-                minHeight: '80vh',
-                backgroundColor: '#f9f9f9',
-                padding: '40px 0',
-            }}
+            style={{ minHeight: '80vh', backgroundColor: '#f9f9f9', padding: '40px 0' }}
         >
             <Row className="w-100" style={{ maxWidth: '800px' }}>
                 <Col className="p-5 bg-white rounded shadow-sm">
@@ -19,14 +27,17 @@ const ContactUs = () => {
                     <p className="text-center mb-4">
                         Got questions or feedback? Fill out the form below, and we&#39;ll get back to you as soon as possible.
                     </p>
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                         {/* Name Field */}
                         <Form.Group className="mb-3">
                             <Form.Label>Full Name</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter your full name"
-                                style={{ backgroundColor: '#E0F2FF' }}
+                                className="p-3"
+                                style={{ backgroundColor: '#E0F2FF', border: 'none' }}
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                             />
                         </Form.Group>
 
@@ -36,7 +47,10 @@ const ContactUs = () => {
                             <Form.Control
                                 type="email"
                                 placeholder="Enter your email"
-                                style={{ backgroundColor: '#E0F2FF' }}
+                                className="p-3"
+                                style={{ backgroundColor: '#E0F2FF', border: 'none' }}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </Form.Group>
 
@@ -46,7 +60,10 @@ const ContactUs = () => {
                             <Form.Control
                                 type="text"
                                 placeholder="Enter subject"
-                                style={{ backgroundColor: '#E0F2FF' }}
+                                className="p-3"
+                                style={{ backgroundColor: '#E0F2FF', border: 'none' }}
+                                value={subject}
+                                onChange={(e) => setSubject(e.target.value)}
                             />
                         </Form.Group>
 
@@ -57,7 +74,10 @@ const ContactUs = () => {
                                 as="textarea"
                                 rows={5}
                                 placeholder="Type your message here"
-                                style={{ backgroundColor: '#E0F2FF' }}
+                                className="p-3"
+                                style={{ backgroundColor: '#E0F2FF', border: 'none' }}
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
                             />
                         </Form.Group>
 
@@ -65,11 +85,8 @@ const ContactUs = () => {
                         <Button
                             variant="primary"
                             type="submit"
-                            className="w-100"
-                            style={{
-                                backgroundColor: '#144B7D',
-                                border: 'none',
-                            }}
+                            className="w-100 p-3"
+                            style={{ backgroundColor: '#144B7D', border: 'none' }}
                         >
                             Send Message
                         </Button>

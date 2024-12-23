@@ -1,0 +1,255 @@
+{
+    "advertisements": [
+      {
+        "title": "Frontend Developer",
+        "companyName": "Tech Corp",
+        "location": "New York, NY",
+        "logoUrl": "https://via.placeholder.com/50",
+        "postedAt": "2 hours ago"
+      },
+      {
+        "title": "Backend Developer",
+        "companyName": "Code Solutions",
+        "location": "San Francisco, CA",
+        "logoUrl": "https://via.placeholder.com/50",
+        "postedAt": "4 hours ago"
+      },
+      {
+        "title": "UI/UX Designer",
+        "companyName": "Design Studio",
+        "location": "Austin, TX",
+        "logoUrl": "https://via.placeholder.com/50",
+        "postedAt": "1 day ago"
+      },
+      {
+        "title": "Frontend Developer",
+        "companyName": "Tech Corp",
+        "location": "New York, NY",
+        "logoUrl": "https://via.placeholder.com/50",
+        "postedAt": "2 hours ago"
+      },
+      {
+        "title": "Backend Developer",
+        "companyName": "Code Solutions",
+        "location": "San Francisco, CA",
+        "logoUrl": "https://via.placeholder.com/50",
+        "postedAt": "4 hours ago"
+      },
+      {
+        "title": "UI/UX Designer",
+        "companyName": "Design Studio",
+        "location": "Austin, TX",
+        "logoUrl": "https://via.placeholder.com/50",
+        "postedAt": "1 day ago"
+      }
+    ],
+
+      "hiringCompanies": [
+    {
+      "name": "Tech Corp",
+      "jobPosts": 120,
+      "logoUrl": "https://via.placeholder.com/50"
+    },
+    {
+      "name": "Code Solutions",
+      "jobPosts": 85,
+      "logoUrl": "https://via.placeholder.com/50"
+    },
+    {
+      "name": "Design Studio",
+      "jobPosts": 45,
+      "logoUrl": "https://via.placeholder.com/50"
+    }
+    ],
+
+    "jobCategories": [
+    {
+      "name": "Software Development",
+      "jobPosts": 500
+    },
+    {
+      "name": "Marketing",
+      "jobPosts": 150
+    },
+    {
+      "name": "Human Resources",
+      "jobPosts": 100
+    } ],
+    
+    "jobs": 
+      [
+        {
+          "title": "Software Engineer",
+          "company": "ABC Corp",
+          "timeAgo": "2 hours ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "100,000 LKR - 150,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "Product Manager",
+          "company": "XYZ Ltd.",
+          "timeAgo": "1 day ago",
+          "location": "Kandy, Sri Lanka",
+          "salary": "150,000 LKR - 200,000 LKR",
+          "jobType": "Part-time"
+        },
+        {
+          "title": "Front-end Developer",
+          "company": "Techies Inc.",
+          "timeAgo": "3 hours ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "120,000 LKR - 170,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "Back-end Developer",
+          "company": "Dev Solutions",
+          "timeAgo": "5 hours ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "130,000 LKR - 180,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "Data Scientist",
+          "company": "DataTech Ltd.",
+          "timeAgo": "1 day ago",
+          "location": "Kandy, Sri Lanka",
+          "salary": "150,000 LKR - 200,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "Product Designer",
+          "company": "CreativeWorks",
+          "timeAgo": "3 days ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "110,000 LKR - 150,000 LKR",
+          "jobType": "Part-time"
+        },
+        {
+          "title": "HR Manager",
+          "company": "PeopleFirst",
+          "timeAgo": "1 week ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "200,000 LKR - 300,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "Project Manager",
+          "company": "BuildCo",
+          "timeAgo": "4 hours ago",
+          "location": "Kandy, Sri Lanka",
+          "salary": "140,000 LKR - 190,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "UX/UI Designer",
+          "company": "DesignHub",
+          "timeAgo": "2 days ago",
+          "location": "Galle, Sri Lanka",
+          "salary": "100,000 LKR - 140,000 LKR",
+          "jobType": "Part-time"
+        },
+        {
+          "title": "Marketing Specialist",
+          "company": "BrandVision",
+          "timeAgo": "6 hours ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "120,000 LKR - 160,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "System Administrator",
+          "company": "TechOps",
+          "timeAgo": "7 hours ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "130,000 LKR - 180,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "Software Tester",
+          "company": "TestersPro",
+          "timeAgo": "1 day ago",
+          "location": "Kandy, Sri Lanka",
+          "salary": "110,000 LKR - 150,000 LKR",
+          "jobType": "Part-time"
+        },
+        {
+          "title": "Business Analyst",
+          "company": "ConsultNow",
+          "timeAgo": "2 days ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "120,000 LKR - 160,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "Graphic Designer",
+          "company": "VisualWorks",
+          "timeAgo": "3 days ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "100,000 LKR - 140,000 LKR",
+          "jobType": "Part-time"
+        },
+        {
+          "title": "Network Engineer",
+          "company": "NetworkX",
+          "timeAgo": "5 hours ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "150,000 LKR - 200,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "Database Administrator",
+          "company": "DataSafe",
+          "timeAgo": "4 hours ago",
+          "location": "Kandy, Sri Lanka",
+          "salary": "120,000 LKR - 160,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "Sales Executive",
+          "company": "SalesForce",
+          "timeAgo": "1 day ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "90,000 LKR - 130,000 LKR",
+          "jobType": "Part-time"
+        },
+        {
+          "title": "Content Writer",
+          "company": "ContentWorks",
+          "timeAgo": "2 days ago",
+          "location": "Galle, Sri Lanka",
+          "salary": "70,000 LKR - 100,000 LKR",
+          "jobType": "Part-time"
+        },
+        {
+          "title": "Customer Support Specialist",
+          "company": "HelpDesk Pro",
+          "timeAgo": "1 week ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "80,000 LKR - 120,000 LKR",
+          "jobType": "Full-time"
+        },
+        {
+          "title": "SEO Specialist",
+          "company": "SEO Masters",
+          "timeAgo": "1 day ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "100,000 LKR - 130,000 LKR",
+          "jobType": "Part-time"
+        },
+        {
+          "title": "Operations Manager",
+          "company": "OpsWorld",
+          "timeAgo": "4 days ago",
+          "location": "Colombo, Sri Lanka",
+          "salary": "160,000 LKR - 220,000 LKR",
+          "jobType": "Full-time"
+        }
+      
+      
+  ]
+
+    
+  }
+  

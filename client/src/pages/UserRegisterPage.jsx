@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Form, Button, Container, Row, Col, Spinner } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { Form, Button, Container, Spinner, Row, Col } from 'react-bootstrap';
 
 const RegisterForm = () => {
     const [formData, setFormData] = useState({
@@ -14,7 +14,16 @@ const RegisterForm = () => {
         confirmPassword: '',
     });
     const [loading, setLoading] = useState(false);
-    const [validationError, ] = useState('');
+    const [validationError] = useState('');
+    const [jsonData, setJsonData] = useState([]); // Holds the data.json contents
+
+    // Fetch data.json during the initial load
+    useEffect(() => {
+        fetch('/data.json')
+            .then((response) => response.json())
+            .then((data) => setJsonData(data))
+            .catch((error) => console.error('Error loading JSON:', error));
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -27,9 +36,16 @@ const RegisterForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
+
+        // Simulate saving data to data.json
+        const updatedData = [...jsonData, formData]; // Add new form data to existing data
+        setJsonData(updatedData);
+
+        // Simulate a delay for saving
         setTimeout(() => {
             setLoading(false);
-            console.log(formData);
+            console.log('Updated JSON Data:', updatedData);
+            alert('Form submitted successfully!');
         }, 2000);
     };
 
@@ -69,8 +85,8 @@ const RegisterForm = () => {
                         />
                     </Form.Group>
 
-                    {/* Home Town Input */}
-                    <Form.Group controlId="formHomeTown" className="mb-3">
+                     {/* Home Town Input */}
+                     <Form.Group controlId="formHomeTown" className="mb-3">
                         <Form.Control
                             type="text"
                             name="location"
@@ -203,7 +219,7 @@ const RegisterForm = () => {
                         </Form.Control.Feedback>
                     </Form.Group>
 
-                    {/* Create Account Button */}
+                    {/* Submit Button */}
                     <Button
                         type="submit"
                         variant="primary"
