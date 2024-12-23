@@ -20,7 +20,7 @@ const AppliedJobCard = ({ jobTitle, companyName, timeAgo, location }) => {
         </div>
         <div className="text-end">
           <small style={{ color: '#888' }}>{location}</small><br />
-          <Link to="#" className="text-primary" style={{ fontWeight: '500' }}>VIEW DETAILS</Link>
+          <Link to="/jobdetail" className="text-primary" style={{ fontWeight: '500' }}>VIEW DETAILS</Link>
         </div>
       </Card.Body>
     </Card>
