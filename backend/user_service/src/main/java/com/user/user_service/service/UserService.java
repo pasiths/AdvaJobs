@@ -33,6 +33,7 @@ public class UserService {
         return "Hello User";
     }
 
+    @SuppressWarnings("null")
     public User registerUser(UserDto userDto) {
 
         if (userDto.getProfilePic() != null && userDto.getProfilePic().getSize() > 10 * 1024 * 1024) { // 2MB limit
@@ -41,6 +42,10 @@ public class UserService {
 
         if (userDto.getCv() != null && !userDto.getCv().getOriginalFilename().endsWith(".pdf")) {
             throw new IllegalArgumentException("CV must be a PDF file");
+        }
+
+        if (userRepo.getUsersByEmail(userDto.getEmail()) != null) {
+            throw new IllegalArgumentException("A user with this email already exists.");
         }
 
         User user = new User();
