@@ -1,8 +1,11 @@
 package com.user.user_service.controller;
 
 import com.user.user_service.data.User;
+import com.user.user_service.data.UserDot;
 import com.user.user_service.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,18 +24,23 @@ public class UserController {
 
     // register user
     @PostMapping(path = "/users")
-    public User registerUser(
-        @RequestParam("fullName") String fullName,
-        @RequestParam("email") String email,
-        @RequestParam("phoneNum") String phoneNum,
-        @RequestParam("location") String location,
-        @RequestParam("gender") String gender,
-        @RequestParam("password") String password,
-        @RequestParam(value = "cv", required = false) MultipartFile cv,
-        @RequestParam(value = "profilePic", required = false) MultipartFile profilePic
-    ) {
-        return userService.registerUser(fullName, email, phoneNum, location, gender, password, cv, profilePic);
+    public ResponseEntity<User> registerUser(@Valid @ModelAttribute UserDot request) {
+        User user = userService.registerUser(request);
+        return ResponseEntity.ok(user);
     }
+    // public User registerUser(
+    // @RequestParam("fullName") @Valid String fullName,
+    // @RequestParam("email") @Valid String email,
+    // @RequestParam("phoneNum") @Valid String phoneNum,
+    // @RequestParam("location") @Valid String location,
+    // @RequestParam("gender") @Valid String gender,
+    // @RequestParam("password") @Valid String password,
+    // @RequestParam(value = "cv", required = false) MultipartFile cv,
+    // @RequestParam(value = "profilePic", required = false) MultipartFile
+    // profilePic) {
+    // return userService.registerUser(fullName, email, phoneNum, location, gender,
+    // password, cv, profilePic);
+    // }
 
     // login user
     @PostMapping(path = "/users/login")
