@@ -30,14 +30,8 @@ public class User {
     @Column(name = "cv", length = 255)
     private String cv;
 
-    @Column(name = "cv_type", length = 255)
-    private String cvType;
-
     @Column(name = "profile_pic", length = 255)
     private String profilePic;
-
-    @Column(name = "profile_pic_type", length = 255)
-    private String profilePicType;
 
     @Column(name = "password", nullable = false, length = 255)
     private String password;
@@ -109,28 +103,12 @@ public class User {
         this.cv = cv;
     }
 
-    public String getCvType() {
-        return cvType;
-    }
-
-    public void setCvType(String cvType) {
-        this.cvType = cvType;
-    }
-
     public String getProfilePic() {
         return profilePic;
     }
 
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
-    }
-
-    public String getProfilePicType() {
-        return profilePicType;
-    }
-
-    public void setProfilePicType(String profilePicType) {
-        this.profilePicType = profilePicType;
     }
 
     public String getPassword() {

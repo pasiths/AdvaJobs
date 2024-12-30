@@ -3,8 +3,8 @@ package com.user.user_service.controller;
 import com.user.user_service.data.User;
 import com.user.user_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,9 +20,18 @@ public class UserController {
     }
 
     // register user
-    @PostMapping(path = "/users/")
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    @PostMapping(path = "/users")
+    public User registerUser(
+        @RequestParam("fullName") String fullName,
+        @RequestParam("email") String email,
+        @RequestParam("phoneNum") String phoneNum,
+        @RequestParam("location") String location,
+        @RequestParam("gender") String gender,
+        @RequestParam("password") String password,
+        @RequestParam(value = "cv", required = false) MultipartFile cv,
+        @RequestParam(value = "profilePic", required = false) MultipartFile profilePic
+    ) {
+        return userService.registerUser(fullName, email, phoneNum, location, gender, password, cv, profilePic);
     }
 
     // login user
