@@ -118,7 +118,7 @@ public class UserService {
             Path filePath = Paths.get(uploadDir + fileName);
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, file.getBytes());
-            return filePath.toString();
+            return filePath.toString().replace("\\", "/");
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file", e);
         }
