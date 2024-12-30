@@ -1,6 +1,7 @@
 package com.user.user_service.service;
 
 import com.user.user_service.data.User;
+import com.user.user_service.data.UserDot;
 import com.user.user_service.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,7 +30,24 @@ public class UserService {
         return "Hello User";
     }
 
-    public User registerUser(String fullName, String email, String phoneNum, String location, String gender, String password, MultipartFile cv, MultipartFile profilePic) {
+    public User registerUser(UserDot userDot) {
+        String fullName = userDot.getFullName();
+        String email = userDot.getEmail();
+        String phoneNum = userDot.getPhoneNum();
+        String location = userDot.getLocation();
+        String gender = userDot.getGender();
+        String password = userDot.getPassword();
+        MultipartFile cv = userDot.getCv();
+        MultipartFile profilePic = userDot.getProfilePic();
+
+        if (profilePic != null && profilePic.getSize() > 2 * 1024 * 1024) { // 2MB limit
+            throw new IllegalArgumentException("Profile picture size exceeds 2MB");
+        }
+
+        if (cv != null && !cv.getOriginalFilename().endsWith(".pdf")) {
+            throw new IllegalArgumentException("CV must be a PDF file");
+        }
+
         User user = new User();
         user.setFullName(fullName);
         user.setEmail(email);
@@ -110,7 +127,6 @@ public class UserService {
 
     @Value("${file.upload-dir}")
     private String uploadDir;
-
 
     private String saveFile(MultipartFile file) {
         try {
