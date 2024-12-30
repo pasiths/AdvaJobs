@@ -1,7 +1,8 @@
 package com.user.user_service.service;
 
+import com.user.user_service.data.Gender;
 import com.user.user_service.data.User;
-import com.user.user_service.data.UserDot;
+import com.user.user_service.data.UserDto;
 import com.user.user_service.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,50 +26,40 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private com.user.user_service.User user;
 
     public String apiTest() {
         return "Hello User";
     }
 
-    public User registerUser(UserDot userDot) {
-        String fullName = userDot.getFullName();
-        String email = userDot.getEmail();
-        String phoneNum = userDot.getPhoneNum();
-        String location = userDot.getLocation();
-        String gender = userDot.getGender();
-        String password = userDot.getPassword();
-        MultipartFile cv = userDot.getCv();
-        MultipartFile profilePic = userDot.getProfilePic();
+    public User registerUser(UserDto userDto) {
 
-        if (profilePic != null && profilePic.getSize() > 2 * 1024 * 1024) { // 2MB limit
-            throw new IllegalArgumentException("Profile picture size exceeds 2MB");
+        if (userDto.getProfilePic() != null && userDto.getProfilePic().getSize() > 10 * 1024 * 1024) { // 2MB limit
+            throw new IllegalArgumentException("Profile picture size exceeds 10MB");
         }
 
-        if (cv != null && !cv.getOriginalFilename().endsWith(".pdf")) {
+        if (userDto.getCv() != null && !userDto.getCv().getOriginalFilename().endsWith(".pdf")) {
             throw new IllegalArgumentException("CV must be a PDF file");
         }
 
         User user = new User();
-        user.setFullName(fullName);
-        user.setEmail(email);
-        user.setPhoneNum(phoneNum);
-        user.setLocation(location);
-        user.setGender(gender);
-        user.setPassword(passwordEncoder.encode(password));
+        user.setFullName(userDto.getFullName());
+        user.setEmail(userDto.getEmail());
+        user.setPhoneNum(userDto.getPhoneNum());
+        user.setLocation(userDto.getLocation());
+        user.setGender(Gender.valueOf(userDto.getGender().toUpperCase()));
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-        if (profilePic != null && !profilePic.isEmpty()) {
-            String profilePicPath = saveFile(profilePic);
+        if (userDto.getProfilePic() != null && !userDto.getProfilePic().isEmpty()) {
+            String profilePicPath = saveFile(userDto.getProfilePic());
             user.setProfilePic(profilePicPath);
         }
 
-        if (cv != null && !cv.isEmpty()) {
-            String cvPath = saveFile(cv);
+        if (userDto.getCv() != null && !userDto.getCv().isEmpty()) {
+            String cvPath = saveFile(userDto.getCv());
             user.setCv(cvPath);
         }
-
-        user.setIsVerified("false");
-        user.setDate(LocalDateTime.now());
-        user.setStatus(1);
         return userRepo.save(user);
     }
 
@@ -94,9 +85,6 @@ public class UserService {
         // Hash the password before saving
         us.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        us.setIsVerified("false");
-        us.setDate(LocalDateTime.now());
-        us.setStatus(1);
         return userRepo.save(us);
     }
 

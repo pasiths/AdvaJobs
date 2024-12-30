@@ -3,12 +3,11 @@ package com.user.user_service.data;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class UserDot {
+public class UserDto {
     @NotNull(message = "Full name is required")
     @Size(min = 3, max = 255, message = "Full name must be between 3 and 255 characters")
     private String fullName;

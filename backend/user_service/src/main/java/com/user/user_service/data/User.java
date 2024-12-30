@@ -18,14 +18,15 @@ public class User {
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name = "phone_num", length = 255)
+    @Column(name = "phone_num", nullable = false, length = 255)
     private String phoneNum;
 
-    @Column(name = "location", length = 255)
+    @Column(name = "location", nullable = false, length = 255)
     private String location;
 
-    @Column(name = "gender", length = 6)
-    private String gender; // Changed from enum to String
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", nullable = false, length = 6)
+    private Gender gender; // Using Enum for gender
 
     @Column(name = "cv", length = 255)
     private String cv;
@@ -36,14 +37,29 @@ public class User {
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
-    @Column(name = "isVerified", length = 255)
-    private String isVerified;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "isVerified", nullable = false, length = 10)
+    private VerificationStatus isVerified = VerificationStatus.Unverified; // Default value
 
-    @Column(name = "date")
-    private LocalDateTime date;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status = Status.Active; // Default value
 
-    @Column(name = "status")
-    private int status;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
     // Getters and Setters
 
@@ -87,11 +103,11 @@ public class User {
         this.location = location;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -119,27 +135,36 @@ public class User {
         this.password = password;
     }
 
-    public String getIsVerified() {
+    public VerificationStatus getIsVerified() {
         return isVerified;
     }
 
-    public void setIsVerified(String isVerified) {
+    public void setIsVerified(VerificationStatus isVerified) {
         this.isVerified = isVerified;
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
 }
