@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import java.io.IOException;
@@ -65,6 +64,7 @@ public class UserService {
             String cvPath = saveFile(userDto.getCv());
             user.setCv(cvPath);
         }
+
         return userRepo.save(user);
     }
 

@@ -3,8 +3,12 @@ package com.user.user_service.controller;
 import com.user.user_service.data.User;
 import com.user.user_service.data.UserDto;
 import com.user.user_service.service.UserService;
+
+import com.user.user_service.utils.TokenUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +27,17 @@ public class UserController {
 
     // register user
     @PostMapping(path = "/users")
-    public ResponseEntity<User> registerUser(@Valid @ModelAttribute UserDto request) {
+    public ResponseEntity<User> registerUser(@Valid @ModelAttribute UserDto request, HttpServletResponse response) {
         User user = userService.registerUser(request);
+
+        String token = TokenUtil.generateToken(user.getId());
+
+        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(true).secure(true).path("/")
+                .maxAge(3600) // 1 hour
+                .build();
+
+        response.setHeader("Set-Cookie", cookie.toString());
+
         return ResponseEntity.ok(user);
     }
 
