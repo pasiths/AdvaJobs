@@ -4,6 +4,7 @@ import com.user.user_service.data.Gender;
 import com.user.user_service.data.User;
 import com.user.user_service.data.UserDto;
 import com.user.user_service.data.UserRepository;
+import com.user.user_service.utils.OtpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +28,8 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private com.user.user_service.User user;
+    @Autowired
+    private OtpUtil otpUtil;
 
     public String apiTest() {
         return "Hello User";
@@ -64,6 +67,8 @@ public class UserService {
             String cvPath = saveFile(userDto.getCv());
             user.setCv(cvPath);
         }
+
+        otpUtil.generateOtp(user.getEmail());
 
         return userRepo.save(user);
     }
