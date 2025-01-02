@@ -29,8 +29,6 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private com.user.user_service.User user;
-    @Autowired
     private OtpUtil otpUtil;
     @Autowired
     private SendEmail sendEmail;
