@@ -5,6 +5,7 @@ import com.user.user_service.data.UserDto;
 import com.user.user_service.service.UserService;
 
 import com.user.user_service.utils.TokenUtil;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ public class UserController {
 
     // register user
     @PostMapping(path = "/users")
-    public ResponseEntity<User> registerUser(@Valid @ModelAttribute UserDto request, HttpServletResponse response) {
+    public ResponseEntity<User> registerUser(@Valid @ModelAttribute UserDto request, HttpServletResponse response)
+            throws MessagingException {
         User user = userService.registerUser(request);
 
         String token = TokenUtil.generateToken(user.getId());

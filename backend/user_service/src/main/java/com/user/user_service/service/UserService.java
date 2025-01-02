@@ -5,6 +5,8 @@ import com.user.user_service.data.User;
 import com.user.user_service.data.UserDto;
 import com.user.user_service.data.UserRepository;
 import com.user.user_service.utils.OtpUtil;
+import com.user.user_service.utils.SendEmail;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,13 +32,15 @@ public class UserService {
     private com.user.user_service.User user;
     @Autowired
     private OtpUtil otpUtil;
+    @Autowired
+    private SendEmail sendEmail;
 
     public String apiTest() {
         return "Hello User";
     }
 
     @SuppressWarnings("null")
-    public User registerUser(UserDto userDto) {
+    public User registerUser(UserDto userDto) throws MessagingException {
 
         if (userDto.getProfilePic() != null && userDto.getProfilePic().getSize() > 10 * 1024 * 1024) { // 2MB limit
             throw new IllegalArgumentException("Profile picture size exceeds 10MB");
@@ -68,7 +72,9 @@ public class UserService {
             user.setCv(cvPath);
         }
 
-        otpUtil.generateOtp(user.getEmail());
+        String otp = otpUtil.generateOtp(user.getEmail());
+
+        sendEmail.sendOtpEmail(user.getEmail(), otp);
 
         return userRepo.save(user);
     }
