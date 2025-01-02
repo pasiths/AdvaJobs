@@ -32,7 +32,7 @@ public class UserController {
             throws MessagingException {
         User user = userService.registerUser(request);
 
-        String token = TokenUtil.generateToken(user.getId());
+        String token = TokenUtil.generateToken(user.getId(), user.getIsVerified().toString());
 
         ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(true).secure(true).path("/")
                 .maxAge(3600) // 1 hour
