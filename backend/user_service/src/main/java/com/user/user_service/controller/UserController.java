@@ -46,7 +46,8 @@ public class UserController {
 
     // login user
     @PostMapping(path = "/users/login")
-    public ResponseEntity<User> login(@Valid @RequestBody LoginRequestDto request, HttpServletResponse response) {
+    public ResponseEntity<User> login(@Valid @RequestBody LoginRequestDto request, HttpServletResponse response)
+            throws MessagingException {
         User user = userService.loginUser(request);
 
         String token = TokenUtil.generateToken(user.getId(), user.getIsVerified().toString());
