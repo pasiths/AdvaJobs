@@ -1,11 +1,8 @@
 package com.user.user_service.service;
 
-import com.user.user_service.data.Gender;
-import com.user.user_service.data.Status;
-import com.user.user_service.data.User;
+import com.user.user_service.data.*;
 import com.user.user_service.dto.LoginRequestDto;
 import com.user.user_service.dto.UserDto;
-import com.user.user_service.data.UserRepository;
 import com.user.user_service.utils.OtpUtil;
 import com.user.user_service.utils.SendEmail;
 import jakarta.mail.MessagingException;
@@ -79,17 +76,23 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public User loginUser(LoginRequestDto loginRequestDto) {
+    public User loginUser(LoginRequestDto loginRequestDto) throws MessagingException {
         User us = userRepo.getUsersByEmail(loginRequestDto.getEmail());
-        if(us == null || us.getStatus() == Status.Inactive) {
+        if (us == null || us.getStatus() == Status.Inactive) {
             throw new IllegalArgumentException("User not found");
         }
 
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), us.getPassword())) {
             throw new IllegalArgumentException("Invalid password");
         }
-        if(us.getStatus() ==  Status.Suspend) {
+        if (us.getStatus() == Status.Suspend) {
             throw new IllegalArgumentException("User is suspended");
+        }
+
+        if (us.getIsVerified() == VerificationStatus.Unverified) {
+            String otp = otpUtil.generateOtp(us.getEmail());
+
+            sendEmail.sendOtpEmail(us.getEmail(), otp);
         }
 
         return us;
@@ -133,7 +136,6 @@ public class UserService {
         userRepo.delete(user);
         return true;
     }
-
 
     @Value("${file.upload-dir}")
     private String uploadDir;
