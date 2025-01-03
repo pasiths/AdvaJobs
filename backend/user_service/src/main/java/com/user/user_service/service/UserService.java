@@ -1,8 +1,10 @@
 package com.user.user_service.service;
 
 import com.user.user_service.data.Gender;
+import com.user.user_service.data.Status;
 import com.user.user_service.data.User;
-import com.user.user_service.data.UserDto;
+import com.user.user_service.dto.LoginRequestDto;
+import com.user.user_service.dto.UserDto;
 import com.user.user_service.data.UserRepository;
 import com.user.user_service.utils.OtpUtil;
 import com.user.user_service.utils.SendEmail;
@@ -77,6 +79,22 @@ public class UserService {
         return userRepo.save(user);
     }
 
+    public User loginUser(LoginRequestDto loginRequestDto) {
+        User us = userRepo.getUsersByEmail(loginRequestDto.getEmail());
+        if(us == null || us.getStatus() == Status.Inactive) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        if (!passwordEncoder.matches(loginRequestDto.getPassword(), us.getPassword())) {
+            throw new IllegalArgumentException("Invalid password");
+        }
+        if(us.getStatus() ==  Status.Suspend) {
+            throw new IllegalArgumentException("User is suspended");
+        }
+
+        return us;
+    }
+
     public List<User> getUsers() {
         return userRepo.findAll();
     }
@@ -116,16 +134,6 @@ public class UserService {
         return true;
     }
 
-    public User loginUser(User user) {
-        User us = userRepo.getUsersByEmail(user.getEmail());
-        if (us != null) {
-            if (passwordEncoder.matches(user.getPassword(), us.getPassword())) {
-                return us;
-            }
-        }
-
-        return null;
-    }
 
     @Value("${file.upload-dir}")
     private String uploadDir;
