@@ -1,7 +1,8 @@
 package com.user.user_service.controller;
 
 import com.user.user_service.data.User;
-import com.user.user_service.data.UserDto;
+import com.user.user_service.dto.LoginRequestDto;
+import com.user.user_service.dto.UserDto;
 import com.user.user_service.service.UserService;
 
 import com.user.user_service.utils.TokenUtil;
@@ -45,8 +46,18 @@ public class UserController {
 
     // login user
     @PostMapping(path = "/users/login")
-    public User login(@RequestBody User user) {
-        return userService.loginUser(user);
+    public ResponseEntity<User> login(@Valid @RequestBody LoginRequestDto request, HttpServletResponse response) {
+        User user = userService.loginUser(request);
+
+        String token = TokenUtil.generateToken(user.getId(), user.getIsVerified().toString());
+
+        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(true).secure(true).path("/")
+                .maxAge(3600) // 1 hour
+                .build();
+
+        response.setHeader("Set-Cookie", cookie.toString());
+
+        return ResponseEntity.ok(user);
     }
 
     // get all users

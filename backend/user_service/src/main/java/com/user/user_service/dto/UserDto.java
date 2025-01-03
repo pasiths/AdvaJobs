@@ -1,4 +1,4 @@
-package com.user.user_service.data;
+package com.user.user_service.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
