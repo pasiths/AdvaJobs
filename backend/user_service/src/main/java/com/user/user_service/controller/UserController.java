@@ -7,6 +7,7 @@ import com.user.user_service.service.UserService;
 
 import com.user.user_service.utils.TokenUtil;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +63,23 @@ public class UserController {
     }
 
     // get all users
-    @GetMapping(path = "/users/auth")
-    public List<User> getUsers() {
+    @GetMapping(path = "/users")
+    public List<User> getUsers(HttpServletRequest request) {
+        String token = null;
+
+        // Extract the token from cookies
+        if (request.getCookies() != null) {
+            for (var cookie : request.getCookies()) {
+                if (cookie.getName().equals("auth_token")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        if (token == null) {
+            throw new IllegalArgumentException("Token not found");
+        }
+
         return userService.getUsers();
     }
 
