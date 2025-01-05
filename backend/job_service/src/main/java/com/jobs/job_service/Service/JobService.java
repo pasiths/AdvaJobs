@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class JobService {
@@ -68,5 +69,15 @@ public class JobService {
         } else {
             throw new RuntimeException("Job not found with id: " + id);
         }
+    }
+
+    // Filter jobs by criteria
+    public List<Jobs> filterJobs(String jobType, String location, Double minSalary, Double maxSalary) {
+        return jobRepo.findAll().stream()
+                .filter(job -> jobType == null || job.getJobType().equalsIgnoreCase(jobType))
+                .filter(job -> location == null || job.getLocation().equalsIgnoreCase(location))
+                .filter(job -> minSalary == null || job.getSalary() >= minSalary)
+                .filter(job -> maxSalary == null || job.getSalary() <= maxSalary)
+                .collect(Collectors.toList());
     }
 }

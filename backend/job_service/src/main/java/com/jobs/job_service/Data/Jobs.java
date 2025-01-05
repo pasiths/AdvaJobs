@@ -1,101 +1,122 @@
 package com.jobs.job_service.Data;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 @Entity
-@Table(name="Jobs")
+@Table(name = "Jobs")
 public class Jobs {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private int id;
+
+    @Column(name = "title", nullable = false, length = 255)
+    private String title;
+
+    @Column(name = "location", nullable = false, length = 255)
+    private String location;
+
+    @Column(name = "close_date", nullable = false)
+    private LocalDate closeDate;
+
+    @Column(name = "description", nullable = false, length = 255)
+    private String description;
+
+    @Column(name = "phone", nullable = false, length = 255)
+    private String phone;
+
+    @Column(name = "email", nullable = false, length = 255)
+    private String email;
+
+    @Column(name = "content", nullable = false, length = 255)
+    private String content;
+
+    @Column(name = "job_type", nullable = false, length = 255) // Added jobType field
+    private String jobType;
+
+    @Column(name = "salary", nullable = false) // Added salary field
+    private double salary;
+
+    // Getters and Setters
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
-    @Column(name = "Title",nullable = false,length = 255)
-    private String Title;
-
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 
-    @Column(name = "Location",nullable = false,length = 255)
-    private String Location;
-
     public String getLocation() {
-        return Location;
+        return location;
     }
 
     public void setLocation(String location) {
-        Location = location;
+        this.location = location;
     }
 
-    @Column(name = "CloseDate",nullable = false)
-    private LocalDate CloseDate;
-
     public LocalDate getCloseDate() {
-        return CloseDate;
+        return closeDate;
     }
 
     public void setCloseDate(LocalDate closeDate) {
-        CloseDate = closeDate;
+        this.closeDate = closeDate;
     }
 
-    @Column(name = "Description",nullable = false,length = 255)
-    private String Description;
-
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
-    @Column(name = "Phone",nullable = false,length = 255)
-    private String Phone;
-
-
     public String getPhone() {
-        return Phone;
+        return phone;
     }
 
     public void setPhone(String phone) {
-        this.Phone = phone;
+        this.phone = phone;
     }
 
-    @Column(name = "Email",nullable = false,length = 255)
-    private String Email;
-
-
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        this.Email = email;
+        this.email = email;
     }
 
-    @Column(name = "Content",nullable = false,length = 255)
-    private String Content;
-
     public String getContent() {
-        return Content;
+        return content;
     }
 
     public void setContent(String content) {
-        Content = content;
+        this.content = content;
     }
 
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
 }

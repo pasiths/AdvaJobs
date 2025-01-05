@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/jobs")
 public class JobController {
 
     @Autowired
@@ -21,7 +22,7 @@ public class JobController {
     }
 
     // Create a new job
-    @PostMapping(path = "/job")
+    @PostMapping
     public Jobs createJob(@RequestBody Jobs job) {
         return jobService.createJob(job);
     }
@@ -49,5 +50,15 @@ public class JobController {
     public String deleteJob(@PathVariable int id) {
         jobService.deleteJob(id);
         return "Job with ID " + id + " has been deleted successfully.";
+    }
+
+    // Filter jobs by parameters
+    @GetMapping("/filter")
+    public List<Jobs> filterJobs(
+            @RequestParam(required = false) String jobType,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) Double minSalary,
+            @RequestParam(required = false) Double maxSalary) {
+        return jobService.filterJobs(jobType, location, minSalary, maxSalary);
     }
 }
