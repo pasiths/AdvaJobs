@@ -85,7 +85,21 @@ public class UserController {
 
     // get user by id
     @GetMapping(path = "/users/{id}")
-    public User getUser(@PathVariable int id) {
+    public User getUser(HttpServletRequest request, @PathVariable int id) {
+        String token = null;
+
+        // Extract the token from cookies
+        if (request.getCookies() != null) {
+            for (var cookie : request.getCookies()) {
+                if (cookie.getName().equals("auth_token")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        if (token == null) {
+            throw new IllegalArgumentException("Token not found");
+        }
         return userService.getUser(id);
     }
 
