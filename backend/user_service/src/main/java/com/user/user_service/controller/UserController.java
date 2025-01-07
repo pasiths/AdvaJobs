@@ -5,6 +5,7 @@ import com.user.user_service.dto.LoginRequestDto;
 import com.user.user_service.dto.UserDto;
 import com.user.user_service.service.UserService;
 
+import com.user.user_service.utils.JwtUtil;
 import com.user.user_service.utils.TokenUtil;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @GetMapping(path = "/test")
     public String getTest() {
@@ -60,6 +64,31 @@ public class UserController {
         response.setHeader("Set-Cookie", cookie.toString());
 
         return ResponseEntity.ok(user);
+    }
+
+    // Otp Resend
+    @PostMapping(path = "/users/resend-otp")
+    public ResponseEntity<String> resendOtp(HttpServletRequest request) throws MessagingException {
+        String token = null;
+
+        // Extract the token from cookies
+        if (request.getCookies() != null) {
+            for (var cookie : request.getCookies()) {
+                if (cookie.getName().equals("auth_token")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        if (token == null) {
+            throw new IllegalArgumentException("Token not found");
+        }
+
+        if (!jwtUtil.validateToken(token)){
+            throw new IllegalArgumentException("Invalid or expired token");
+        }
+
+        return ResponseEntity.ok("OTP sent successfully");
     }
 
     // get all users

@@ -1,5 +1,6 @@
 package com.user.user_service.utils;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -11,7 +12,9 @@ import java.util.Map;
 
 public class TokenUtil {
 
-    private static final Key SECRECT_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String SECRET_KEY = dotenv.get("SECRET_KEY");
+    private static final Key SECRECT_KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     private static final long TOKEN_EXPIRATION_MS = 3600000; // 1 hour
 
     public static String generateToken(int userId, String isVerified) {
