@@ -98,6 +98,25 @@ public class UserService {
         return us;
     }
 
+    public void resendOtp(String email) throws MessagingException {
+        User us = userRepo.getUsersByEmail(email);
+        if (us == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        if (us.getStatus() == Status.Inactive) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        if (us.getIsVerified() == VerificationStatus.Verified) {
+            throw new IllegalArgumentException("User is already verified");
+        }
+
+        String otp = otpUtil.generateOtp(us.getEmail());
+
+        sendEmail.sendOtpEmail(us.getEmail(), otp);
+    }
+
     public List<User> getUsers() {
         return userRepo.findAll();
     }

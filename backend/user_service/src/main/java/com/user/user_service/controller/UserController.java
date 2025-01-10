@@ -84,7 +84,7 @@ public class UserController {
             throw new IllegalArgumentException("Token not found");
         }
 
-        if (!jwtUtil.validateToken(token)){
+        if (!jwtUtil.validateToken(token)) {
             throw new IllegalArgumentException("Invalid or expired token");
         }
 
