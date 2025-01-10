@@ -15,11 +15,12 @@ public class JwtUtil {
     private static final Key SECRECT_KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
     // Validate JWT Token
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(SECRECT_KEY).parseClaimsJws(token);
             return true;
-        }catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException e){
+        } catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException
+                | IllegalArgumentException e) {
             System.err.println("Invalid JWT Token" + e.getMessage());
             return false;
         }
