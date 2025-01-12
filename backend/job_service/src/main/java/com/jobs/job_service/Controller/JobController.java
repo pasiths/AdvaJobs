@@ -1,12 +1,14 @@
-package com.jobs.job_service.Controll;
+package com.jobs.job_service.Controller;
 
 import com.jobs.job_service.Data.Jobs;
 import com.jobs.job_service.Service.JobService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/jobs")
@@ -23,7 +25,8 @@ public class JobController {
 
     // Create a new job
     @PostMapping
-    public Jobs createJob(@RequestBody Jobs job) {
+    public Jobs createJob(@RequestBody @Valid Jobs job) {
+        // Business logic...
         return jobService.createJob(job);
     }
 
