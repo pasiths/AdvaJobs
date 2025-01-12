@@ -4,7 +4,10 @@ import com.example.company_service.data.Company;
 import com.example.company_service.data.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +16,9 @@ public class CompanyService {
 
     @Autowired
     private CompanyRepository cmpRepo;
+
+    @Autowired
+    //private PasswordEncoder passwordEncoder;
 
     public List<Company> getCompanies(){
         return cmpRepo.findAll();
@@ -38,14 +44,112 @@ public class CompanyService {
     }
 
     // Method to create or save a company
+//    public Company createCompany(Company company) {
+//        return cmpRepo.save(company);
+//    }
+
     public Company createCompany(Company company) {
-        return cmpRepo.save(company);
+        // Create a new Company object
+        Company com = new Company();
+
+        // Set the incoming values from the parameter object
+        com.setName(company.getName());
+        com.setEmail(company.getEmail());
+        com.setPhoneNum(company.getPhoneNum());
+        com.setLocation(company.getLocation());
+        com.setIndustry(company.getIndustry());
+
+        // Set default values
+        com.setLogo("null");
+        com.setLogoType("null");
+        // Hash the password before saving (uncomment if a password field exists)
+        // com.setPassword(passwordEncoder.encode(company.getPassword()));
+        com.setPassword(company.getPassword());
+
+        com.setIsVerified("false");
+        com.setDate(LocalDateTime.now());
+        com.setStatus(1);
+
+        // Save the new company entity to the database
+        return cmpRepo.save(com);
     }
 
-    // Method to update a company
-    public Company updateCompany(Company company){
-        return cmpRepo.save(company);
+
+//    // Method to update a company
+//    public Company updateCompany(int id,Company company){
+//        // Create a new Company object
+//        Company com = new Company();
+//
+//        // Set the incoming values from the parameter object
+//        com.setName(company.getName());
+//        com.setEmail(company.getEmail());
+//        com.setPhoneNum(company.getPhoneNum());
+//        com.setLocation(company.getLocation());
+//        com.setIndustry(company.getIndustry());
+//
+//        // Set default values
+//        com.setLogo("null");
+//        com.setLogoType("null");
+//        // Hash the password before saving (uncomment if a password field exists)
+//        // com.setPassword(passwordEncoder.encode(company.getPassword()));
+//        com.setPassword(company.getPassword());
+//
+//        com.setIsVerified("false");
+//        com.setDate(LocalDateTime.now());
+//        com.setStatus(1);
+//
+//        // Save the new company entity to the database
+//        return cmpRepo.save(com);
+//    }
+
+    public Company updateCompany(int id, Company company) {
+        // Fetch the existing company from the database using the ID
+        Company existingCompany = cmpRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Company with ID " + id + " not found"));
+
+        // Update only fields provided in the input
+        if (company.getName() != null && !company.getName().isEmpty()) {
+            existingCompany.setName(company.getName());
+        }
+        if (company.getPhoneNum() != null && !company.getPhoneNum().isEmpty()) {
+            existingCompany.setPhoneNum(company.getPhoneNum());
+        }
+        if (company.getLocation() != null && !company.getLocation().isEmpty()) {
+            existingCompany.setLocation(company.getLocation());
+        }
+        if (company.getIndustry() != null && !company.getIndustry().isEmpty()) {
+            existingCompany.setIndustry(company.getIndustry());
+        }
+
+        // Preserve email unless explicitly updated
+        if (company.getEmail() != null && !company.getEmail().isEmpty()) {
+            // Validate uniqueness of the new email
+            if (!company.getEmail().equals(existingCompany.getEmail()) &&
+                    cmpRepo.existsByEmail(company.getEmail())) {
+                throw new RuntimeException("Email " + company.getEmail() + " is already in use");
+            }
+            existingCompany.setEmail(company.getEmail());
+        }
+
+        // Preserve the password if not provided in the update request
+        if (company.getPassword() != null && !company.getPassword().isEmpty()) {
+            existingCompany.setPassword(company.getPassword()); // Optionally hash the new password
+        }
+
+        // Handle other default or derived fields
+        existingCompany.setLogo("null");
+        existingCompany.setLogoType("null");
+        existingCompany.setIsVerified("false");
+        existingCompany.setDate(LocalDateTime.now());
+        existingCompany.setStatus(1);
+
+        // Save and return the updated entity
+        return cmpRepo.save(existingCompany);
     }
+
+
+
+
 
     //Method to delete a company by ID
     public void deleteCompany(int id){

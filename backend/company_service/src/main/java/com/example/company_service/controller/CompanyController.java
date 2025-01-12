@@ -3,6 +3,7 @@ package com.example.company_service.controller;
 import com.example.company_service.data.Company;
 import com.example.company_service.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,15 +34,22 @@ public class CompanyController {
         return obj.getCompanyByNameAndStatus(name,status);
     }
 
-    // New endpoint for creating a student
+    // New endpoint for creating a company
     @PostMapping(path = "/companies")
     public Company createCompany(@RequestBody Company company) {
         return obj.createCompany(company);
     }
 
-    @PutMapping (path = "/companies")
-    public Company updateCompany(@RequestBody Company company){
-        return obj.updateCompany(company);
+//    @PutMapping (path = "/companies/{id}")
+//    public Company updateCompany(@PathVariable int id,@RequestBody Company company){
+//        return obj.updateCompany(id,company);
+//    }
+
+    // Update company endpoint
+    @PutMapping("/companies/{id}")
+    public ResponseEntity<Company> updateCompany(@PathVariable int id, @RequestBody Company company) {
+        Company updatedCompany = obj.updateCompany(id, company);
+        return ResponseEntity.ok(updatedCompany);
     }
 
     @DeleteMapping(path = "/companies/{id}")
