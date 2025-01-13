@@ -124,10 +124,10 @@ public class CompanyService {
         // Preserve email unless explicitly updated
         if (company.getEmail() != null && !company.getEmail().isEmpty()) {
             // Validate uniqueness of the new email
-            if (!company.getEmail().equals(existingCompany.getEmail()) &&
-                    cmpRepo.existsByEmail(company.getEmail())) {
-                throw new RuntimeException("Email " + company.getEmail() + " is already in use");
-            }
+//            if (!company.getEmail().equals(existingCompany.getEmail()) &&
+//                    cmpRepo.existsByEmail(company.getEmail())) {
+//                throw new RuntimeException("Email " + company.getEmail() + " is already in use");
+//            }
             existingCompany.setEmail(company.getEmail());
         }
 
