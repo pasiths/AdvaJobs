@@ -38,23 +38,52 @@ public class CompanyService {
         return cmpRepo.getCompanyByName(name);
     }
 
-    public Company createCompany(Company company) {
-        // Create a new Company object
-        Company com = new Company();
+//    public Company createCompany(Company company) {
+//        // Create a new Company object
+//        Company com = new Company();
+//
+//        // Set the incoming values from the parameter object
+//        com.setName(company.getName());
+//        com.setEmail(company.getEmail());
+//        com.setPhoneNum(company.getPhoneNum());
+//        com.setLocation(company.getLocation());
+//        com.setIndustry(company.getIndustry());
+//
+//        // Set default values
+//        com.setLogo("null");
+//        // Hash the password before saving (uncomment if a password field exists)
+//        com.setPassword(passwordEncoder.encode(company.getPassword()));
+//        //com.setPassword(company.getPassword());
+//
+//        com.setIsVerified("false");
+//        com.setDate(LocalDateTime.now());
+//        com.setStatus(1);
+//
+//        // Save the new company entity to the database
+//        return cmpRepo.save(com);
+//    }
 
-        // Set the incoming values from the parameter object
+    public Company createCompany(Company company) {
+        // Check if a company with the same name, email, or phone number already exists
+        if (cmpRepo.existsByName(company.getName())) {
+            throw new RuntimeException("A company with the name '" + company.getName() + "' already exists.");
+        }
+        if (cmpRepo.existsByEmail(company.getEmail())) {
+            throw new RuntimeException("A company with the email '" + company.getEmail() + "' already exists.");
+        }
+        if (cmpRepo.existsByPhoneNum(company.getPhoneNum())) {
+            throw new RuntimeException("A company with the phone number '" + company.getPhoneNum() + "' already exists.");
+        }
+
+        // Create a new Company object and set its fields
+        Company com = new Company();
         com.setName(company.getName());
         com.setEmail(company.getEmail());
         com.setPhoneNum(company.getPhoneNum());
         com.setLocation(company.getLocation());
         com.setIndustry(company.getIndustry());
-
-        // Set default values
         com.setLogo("null");
-        // Hash the password before saving (uncomment if a password field exists)
         com.setPassword(passwordEncoder.encode(company.getPassword()));
-        //com.setPassword(company.getPassword());
-
         com.setIsVerified("false");
         com.setDate(LocalDateTime.now());
         com.setStatus(1);
@@ -62,6 +91,7 @@ public class CompanyService {
         // Save the new company entity to the database
         return cmpRepo.save(com);
     }
+
 
 
     public Company updateCompany(int id, Company company) {
