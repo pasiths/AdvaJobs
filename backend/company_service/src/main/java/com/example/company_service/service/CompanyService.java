@@ -4,7 +4,7 @@ import com.example.company_service.data.Company;
 import com.example.company_service.data.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ public class CompanyService {
     private CompanyRepository cmpRepo;
 
     @Autowired
-    //private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     public List<Company> getCompanies(){
         return cmpRepo.findAll();
@@ -63,8 +63,8 @@ public class CompanyService {
         com.setLogo("null");
         com.setLogoType("null");
         // Hash the password before saving (uncomment if a password field exists)
-        // com.setPassword(passwordEncoder.encode(company.getPassword()));
-        com.setPassword(company.getPassword());
+        com.setPassword(passwordEncoder.encode(company.getPassword()));
+        //com.setPassword(company.getPassword());
 
         com.setIsVerified("false");
         com.setDate(LocalDateTime.now());
@@ -133,7 +133,7 @@ public class CompanyService {
 
         // Preserve the password if not provided in the update request
         if (company.getPassword() != null && !company.getPassword().isEmpty()) {
-            existingCompany.setPassword(company.getPassword()); // Optionally hash the new password
+            existingCompany.setPassword(passwordEncoder.encode(company.getPassword()));
         }
 
         // Handle other default or derived fields
