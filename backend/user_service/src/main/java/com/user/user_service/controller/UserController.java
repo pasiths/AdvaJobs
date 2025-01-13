@@ -2,6 +2,7 @@ package com.user.user_service.controller;
 
 import com.user.user_service.data.User;
 import com.user.user_service.dto.LoginRequestDto;
+import com.user.user_service.dto.UpdateDto;
 import com.user.user_service.dto.UserDto;
 import com.user.user_service.service.UserService;
 
@@ -135,8 +136,22 @@ public class UserController {
 
     // update user
     @PutMapping(path = "/users/{id}")
-    public User updateUser(@PathVariable int id, @RequestBody User user) {
-        return userService.updateUser(id, user);
+    public User updateUser(HttpServletRequest request, @PathVariable int id, @Valid @ModelAttribute UpdateDto us) {
+        String token = null;
+
+        // Extract the token from cookies
+        if (request.getCookies() != null) {
+            for (var cookie : request.getCookies()) {
+                if (cookie.getName().equals("auth_token")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        if (token == null) {
+            throw new IllegalArgumentException("Token not found");
+        }
+        return userService.updateUser(id, us);
     }
 
     // delete user

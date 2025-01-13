@@ -2,6 +2,7 @@ package com.user.user_service.service;
 
 import com.user.user_service.data.*;
 import com.user.user_service.dto.LoginRequestDto;
+import com.user.user_service.dto.UpdateDto;
 import com.user.user_service.dto.UserDto;
 import com.user.user_service.utils.OtpUtil;
 import com.user.user_service.utils.SendEmail;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -139,19 +141,51 @@ public class UserService {
         return us;
     }
 
-    public User updateUser(int id, User user) {
-        User us = new User();
-        us.setId(id);
-        us.setFullName(user.getFullName());
-        us.setEmail(user.getEmail());
-        us.setPhoneNum(user.getPhoneNum());
-        us.setLocation(user.getLocation());
-        us.setGender(user.getGender());
-        us.setCv("null");
-        us.setProfilePic("null");
+    public User updateUser(int id, UpdateDto userDto) {
 
-        // Hash the password before saving
-        us.setPassword(passwordEncoder.encode(user.getPassword()));
+        User us = userRepo.findById(id).orElse(null);
+
+        if (us == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        if (us.getStatus() == Status.Suspend) {
+            throw new IllegalArgumentException("User is suspended");
+        }
+
+        if (us.getStatus() == Status.Inactive) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        if (userDto.getProfilePic() != null && userDto.getProfilePic().getSize() > 10 * 1024 * 1024) { // 2MB limit
+            throw new IllegalArgumentException("Profile picture size exceeds 10MB");
+        }
+
+        if (userDto.getCv() != null && !userDto.getCv().getOriginalFilename().endsWith(".pdf")) {
+            throw new IllegalArgumentException("CV must be a PDF file");
+        }
+
+        if (!Objects.equals(userDto.getEmail(), us.getEmail())) {
+            if (userRepo.getUsersByEmail(userDto.getEmail()) != null) {
+                throw new IllegalArgumentException("A user with this email already exists.");
+            }
+        }
+
+        us.setFullName(userDto.getFullName());
+        us.setEmail(userDto.getEmail());
+        us.setPhoneNum(userDto.getPhoneNum());
+        us.setLocation(userDto.getLocation());
+        us.setGender(Gender.valueOf(userDto.getGender().toUpperCase()));
+
+        if (userDto.getProfilePic() != null && !userDto.getProfilePic().isEmpty()) {
+            String profilePicPath = saveFile(userDto.getProfilePic());
+            us.setProfilePic(profilePicPath);
+        }
+
+        if (userDto.getCv() != null && !userDto.getCv().isEmpty()) {
+            String cvPath = saveFile(userDto.getCv());
+            us.setCv(cvPath);
+        }
 
         return userRepo.save(us);
     }
