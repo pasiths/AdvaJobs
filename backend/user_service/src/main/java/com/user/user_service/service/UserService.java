@@ -122,7 +122,21 @@ public class UserService {
     }
 
     public User getUser(int id) {
-        return userRepo.findById(id).orElse(null);
+        User us = userRepo.findById(id).orElse(null);
+
+        if (us == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        if (us.getStatus() == Status.Suspend) {
+            throw new IllegalArgumentException("User is suspended");
+        }
+
+        if (us.getStatus() == Status.Inactive) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        return us;
     }
 
     public User updateUser(int id, User user) {
