@@ -190,18 +190,26 @@ public class UserService {
         return userRepo.save(us);
     }
 
-    public boolean deleteUser(int id) {
-        User user = userRepo.findById(id).orElse(null);
-        if (user != null) {
-            userRepo.delete(user);
-            return true;
-        }
-        return false;
-    }
+    public String deleteUser(int id) {
+        User us = userRepo.findById(id).orElse(null);
 
-    public boolean deleteUser(User user) {
-        userRepo.delete(user);
-        return true;
+        if (us == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        if (us.getStatus() == Status.Suspend) {
+            throw new IllegalArgumentException("User is suspended");
+        }
+
+        if (us.getStatus() == Status.Inactive) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        us.setStatus(Status.Inactive);
+
+        userRepo.save(us);
+
+        return "User deleted successfully";
     }
 
     @Value("${file.upload-dir}")
