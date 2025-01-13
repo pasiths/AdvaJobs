@@ -193,4 +193,10 @@ public class UserController {
         return ResponseEntity.ok("Logged out successfully");
     }
 
+    @PostMapping("/suspend/{id}")
+    public ResponseEntity<String> suspendUser(@PathVariable int id) {
+        userService.suspendUser(id);
+        return ResponseEntity.ok("User suspended successfully");
+    }
+
 }
