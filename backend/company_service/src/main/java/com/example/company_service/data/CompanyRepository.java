@@ -14,4 +14,6 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
     @Query("select c from Company c where c.name=?1 and c.status=?2")
     public List<Company> getCompanyByNameAndStatus(String name, int status);
+
+    boolean existsByEmail(String email);
 }
