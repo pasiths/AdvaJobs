@@ -30,9 +30,6 @@ public class Company {
     @Column(name = "logo", length = 255)
     private String logo;
 
-    @Column(name = "logo_type", length = 255)
-    private String logoType;
-
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
@@ -99,14 +96,6 @@ public class Company {
 
     public void setLogo(String logo) {
         this.logo = logo;
-    }
-
-    public String getLogoType() {
-        return logoType;
-    }
-
-    public void setLogoType(String logoType) {
-        this.logoType = logoType;
     }
 
     public String getPassword() {
