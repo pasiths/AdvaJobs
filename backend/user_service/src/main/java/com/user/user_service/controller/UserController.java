@@ -9,6 +9,7 @@ import com.user.user_service.service.UserService;
 import com.user.user_service.utils.JwtUtil;
 import com.user.user_service.utils.TokenUtil;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -173,6 +174,23 @@ public class UserController {
         }
 
         return userService.deleteUser(id);
+    }
+
+    @PostMapping(path = "/users/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+
+        // Clear cookies
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                cookie.setValue(null);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
+        }
+
+        return ResponseEntity.ok("Logged out successfully");
     }
 
 }
