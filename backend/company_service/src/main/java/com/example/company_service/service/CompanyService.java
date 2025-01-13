@@ -43,11 +43,6 @@ public class CompanyService {
         return cmpRepo.getCompanyByNameAndStatus(name,status);
     }
 
-    // Method to create or save a company
-//    public Company createCompany(Company company) {
-//        return cmpRepo.save(company);
-//    }
-
     public Company createCompany(Company company) {
         // Create a new Company object
         Company com = new Company();
@@ -61,7 +56,6 @@ public class CompanyService {
 
         // Set default values
         com.setLogo("null");
-        com.setLogoType("null");
         // Hash the password before saving (uncomment if a password field exists)
         com.setPassword(passwordEncoder.encode(company.getPassword()));
         //com.setPassword(company.getPassword());
@@ -74,33 +68,6 @@ public class CompanyService {
         return cmpRepo.save(com);
     }
 
-
-//    // Method to update a company
-//    public Company updateCompany(int id,Company company){
-//        // Create a new Company object
-//        Company com = new Company();
-//
-//        // Set the incoming values from the parameter object
-//        com.setName(company.getName());
-//        com.setEmail(company.getEmail());
-//        com.setPhoneNum(company.getPhoneNum());
-//        com.setLocation(company.getLocation());
-//        com.setIndustry(company.getIndustry());
-//
-//        // Set default values
-//        com.setLogo("null");
-//        com.setLogoType("null");
-//        // Hash the password before saving (uncomment if a password field exists)
-//        // com.setPassword(passwordEncoder.encode(company.getPassword()));
-//        com.setPassword(company.getPassword());
-//
-//        com.setIsVerified("false");
-//        com.setDate(LocalDateTime.now());
-//        com.setStatus(1);
-//
-//        // Save the new company entity to the database
-//        return cmpRepo.save(com);
-//    }
 
     public Company updateCompany(int id, Company company) {
         // Fetch the existing company from the database using the ID
@@ -123,11 +90,6 @@ public class CompanyService {
 
         // Preserve email unless explicitly updated
         if (company.getEmail() != null && !company.getEmail().isEmpty()) {
-            // Validate uniqueness of the new email
-//            if (!company.getEmail().equals(existingCompany.getEmail()) &&
-//                    cmpRepo.existsByEmail(company.getEmail())) {
-//                throw new RuntimeException("Email " + company.getEmail() + " is already in use");
-//            }
             existingCompany.setEmail(company.getEmail());
         }
 
@@ -138,7 +100,6 @@ public class CompanyService {
 
         // Handle other default or derived fields
         existingCompany.setLogo("null");
-        existingCompany.setLogoType("null");
         existingCompany.setIsVerified("false");
         existingCompany.setDate(LocalDateTime.now());
         existingCompany.setStatus(1);
