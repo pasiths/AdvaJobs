@@ -156,7 +156,22 @@ public class UserController {
 
     // delete user
     @DeleteMapping(path = "/users/{id}")
-    public String deleteUser(@PathVariable int id) {
+    public String deleteUser(HttpServletRequest request, @PathVariable int id) {
+        String token = null;
+
+        // Extract the token from cookies
+        if (request.getCookies() != null) {
+            for (var cookie : request.getCookies()) {
+                if (cookie.getName().equals("auth_token")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        if (token == null) {
+            throw new IllegalArgumentException("Token not found");
+        }
+
         return userService.deleteUser(id);
     }
 
