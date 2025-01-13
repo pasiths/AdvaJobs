@@ -29,11 +29,6 @@ public class CompanyController {
         return obj.getCompanyByName(name);
     }
 
-    @GetMapping(path = "/companies", params = {"name","status"})
-    public List<Company> getCompanyByNameAndStatus(@RequestParam String name, @RequestParam int status) {
-        return obj.getCompanyByNameAndStatus(name,status);
-    }
-
     // New endpoint for creating a company
     @PostMapping(path = "/companies")
     public Company createCompany(@RequestBody Company company) {
@@ -56,16 +51,6 @@ public class CompanyController {
     public void deleteCompany(@PathVariable int id){
         obj.deleteCompany(id);
     }
-
-//    @GetMapping(path = "/test")
-//    public String testEndpoint() {
-//        return "Hello, World!";
-//    }
-//
-//    @GetMapping(path = "/hello")
-//    public String helloEndpoint() {
-//        return "Hello from /hello!";
-//    }
 
 
 }

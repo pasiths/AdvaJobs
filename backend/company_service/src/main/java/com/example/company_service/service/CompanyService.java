@@ -38,11 +38,6 @@ public class CompanyService {
         return cmpRepo.getCompanyByName(name);
     }
 
-    public List<Company> getCompanyByNameAndStatus(String name,int status)
-    {
-        return cmpRepo.getCompanyByNameAndStatus(name,status);
-    }
-
     public Company createCompany(Company company) {
         // Create a new Company object
         Company com = new Company();
@@ -107,10 +102,6 @@ public class CompanyService {
         // Save and return the updated entity
         return cmpRepo.save(existingCompany);
     }
-
-
-
-
 
     //Method to delete a company by ID
     public void deleteCompany(int id){
