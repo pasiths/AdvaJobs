@@ -87,7 +87,8 @@ public class UserController {
         if (!jwtUtil.validateToken(token)) {
             throw new IllegalArgumentException("Invalid or expired token");
         }
-
+        String req = request.getParameter("email");
+        userService.resendOtp(req);
         return ResponseEntity.ok("OTP sent successfully");
     }
 
