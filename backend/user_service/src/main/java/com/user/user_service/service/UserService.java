@@ -212,6 +212,25 @@ public class UserService {
         return "User deleted successfully";
     }
 
+    public void suspendUser(int id) {
+        User us = userRepo.findById(id).orElse(null);
+
+        if (us == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        if (us.getStatus() == Status.Suspend) {
+            throw new IllegalArgumentException("User is suspended");
+        }
+
+        if (us.getStatus() == Status.Inactive) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        us.setStatus(Status.Suspend); // Set user status to suspended
+        userRepo.save(us); // Save changes to the database
+    }
+
     @Value("${file.upload-dir}")
     private String uploadDir;
 
