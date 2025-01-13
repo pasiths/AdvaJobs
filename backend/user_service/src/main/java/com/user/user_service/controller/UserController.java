@@ -156,7 +156,7 @@ public class UserController {
 
     // delete user
     @DeleteMapping(path = "/users/{id}")
-    public boolean deleteUser(@PathVariable int id) {
+    public String deleteUser(@PathVariable int id) {
         return userService.deleteUser(id);
     }
 
