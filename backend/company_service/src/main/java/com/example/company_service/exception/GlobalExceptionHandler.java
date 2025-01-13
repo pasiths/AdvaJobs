@@ -1,4 +1,4 @@
-package com.example.company_service.controller;
+package com.example.company_service.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
