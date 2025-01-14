@@ -33,7 +33,6 @@ public class JobService {
 
     // Retrieve a job by ID
     public Jobs getJobById(int id) {
-
         Jobs job = jobRepo.findById(id).orElse(null);
         if (job == null) {
             throw new IllegalArgumentException("Job not found");
@@ -54,7 +53,7 @@ public class JobService {
     // Retrieve only active jobs
     public List<Jobs> getActiveJobs() {
         return jobRepo.findAll().stream()
-                .filter(job -> Status.Active.equals(job.getStatus()))  // Compare with Status enum
+                .filter(job -> Status.Active.equals(job.getStatus()))
                 .collect(Collectors.toList());
     }
 
@@ -65,6 +64,11 @@ public class JobService {
         if (existingJobOpt.isPresent()) {
             Jobs existingJob = existingJobOpt.get();
 
+            // Check job status
+            if (existingJob.getStatus() == Status.Inactive) {
+                throw new IllegalArgumentException("Cannot update an inactive job");
+            }
+
             // Update fields
             existingJob.setTitle(jobDetails.getTitle());
             existingJob.setLocation(jobDetails.getLocation());
@@ -73,7 +77,7 @@ public class JobService {
             existingJob.setPhone(jobDetails.getPhone());
             existingJob.setEmail(jobDetails.getEmail());
             existingJob.setContent(jobDetails.getContent());
-            existingJob.setStatus(jobDetails.getStatus());  // Update status if necessary
+            existingJob.setStatus(jobDetails.getStatus());
 
             return jobRepo.save(existingJob);
         } else {
@@ -90,7 +94,6 @@ public class JobService {
 
             // Change job status to 'inactive'
             existingJob.setStatus(Status.Inactive);
-
             jobRepo.save(existingJob);
         } else {
             throw new RuntimeException("Job not found with id: " + id);
@@ -98,8 +101,9 @@ public class JobService {
     }
 
     // Filter jobs by criteria
-    public List<Jobs> filterJobs(String jobType, String location, Double minSalary, Double maxSalary ) {
+    public List<Jobs> filterJobs(String jobType, String location, Double minSalary, Double maxSalary) {
         return jobRepo.findAll().stream()
+                .filter(job -> Status.Active.equals(job.getStatus())) // Include only active jobs
                 .filter(job -> jobType == null || job.getJobType().equalsIgnoreCase(jobType))
                 .filter(job -> location == null || job.getLocation().equalsIgnoreCase(location))
                 .filter(job -> minSalary == null || job.getSalary() >= minSalary)
