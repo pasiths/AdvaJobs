@@ -80,6 +80,9 @@ public class CompanyService {
         return cmpRepo.findCompaniesByStartingLetter(startsWith.toLowerCase() + "%");
     }
 
+    public List<Company> getCompaniesByIndustryStartingLetter(String industryStartsWith) {
+        return cmpRepo.findCompaniesByIndustryStartingLetter(industryStartsWith.toLowerCase() + "%");
+    }
 
 
 //    public Company createCompany(Company company) {
