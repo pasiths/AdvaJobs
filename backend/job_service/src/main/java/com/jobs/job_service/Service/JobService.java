@@ -32,8 +32,18 @@ public class JobService {
     }
 
     // Retrieve a job by ID
-    public Optional<Jobs> getJobById(int id) {
-        return jobRepo.findById(id);
+    public Jobs getJobById(int id) {
+
+        Jobs job = jobRepo.findById(id).orElse(null);
+        if (job == null) {
+            throw new IllegalArgumentException("Job not found");
+        }
+
+        if (job.getStatus() == Status.Inactive) {
+            throw new IllegalArgumentException("Job not found");
+        }
+
+        return job;
     }
 
     // Retrieve all jobs (including active or inactive)

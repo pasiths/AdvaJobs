@@ -38,7 +38,7 @@ public class JobController {
 
     // Get a job by ID
     @GetMapping("/{id}")
-    public Optional<Jobs> getJobById(@PathVariable int id) {
+    public Jobs getJobById(@PathVariable int id) {
         return jobService.getJobById(id);
     }
 
