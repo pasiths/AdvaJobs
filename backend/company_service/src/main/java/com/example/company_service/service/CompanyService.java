@@ -173,12 +173,29 @@ public class CompanyService {
 //            cmpRepo.deleteById(id);
 //        }
 //    }
+
+//    public void deleteCompany(int id) {
+//        Company company = cmpRepo.findById(id)
+//            .orElseThrow(() -> new RuntimeException("Company with ID " + id + " not found"));
+//        ensureActiveStatus(company); // Check if the company is active
+//        cmpRepo.deleteById(id);
+//    }
+
     public void deleteCompany(int id) {
+        // Fetch the company from the database
         Company company = cmpRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Company with ID " + id + " not found"));
-        ensureActiveStatus(company); // Check if the company is active
-        cmpRepo.deleteById(id);
+                .orElseThrow(() -> new RuntimeException("Company with ID " + id + " not found"));
+
+        // Check if the company is already inactive
+        if (company.getStatus() == 0) {
+            throw new RuntimeException("Company is already inactive");
+        }
+
+        // Update the status to 0 (inactive)
+        company.setStatus(0);
+        cmpRepo.save(company); // Save the updated entity
     }
+
 
 
 }
