@@ -90,6 +90,17 @@ public class CompanyService {
                 .toList();
     }
 
+    public List<Company> getCompaniesByIndustry(String industry) {
+        List<Company> companies = cmpRepo.findCompaniesByIndustry(industry);
+
+        if (companies == null || companies.isEmpty()) {
+            throw new RuntimeException("No companies found for the given industry");
+        }
+
+        return companies;
+    }
+
+
 
 //    public Company createCompany(Company company) {
 //        // Create a new Company object

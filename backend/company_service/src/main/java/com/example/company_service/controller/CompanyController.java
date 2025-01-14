@@ -4,6 +4,7 @@ import com.example.company_service.data.Company;
 import com.example.company_service.dto.LoginRequestDto;
 import com.example.company_service.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,24 @@ public class CompanyController {
     public List<Company> getCompanyByName(@RequestParam String name) {
         return obj.getCompanyByName(name);
     }
+
+    @GetMapping(path = "/companies", params = "industry")
+    public ResponseEntity<?> getCompaniesByIndustry(@RequestParam String industry) {
+        try {
+            List<Company> companies = obj.getCompaniesByIndustry(industry);
+
+            if (companies.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No companies found in the industry: " + industry);
+            }
+
+            return ResponseEntity.ok(companies);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while fetching companies: " + e.getMessage());
+        }
+    }
+
 
     // New endpoint for creating a company
     @PostMapping(path = "/companies")
