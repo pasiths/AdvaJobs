@@ -1,6 +1,7 @@
 package com.example.company_service.controller;
 
 import com.example.company_service.data.Company;
+import com.example.company_service.dto.LoginRequestDto;
 import com.example.company_service.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,12 @@ public class CompanyController {
     @DeleteMapping(path = "/companies/{id}")
     public void deleteCompany(@PathVariable int id){
         obj.deleteCompany(id);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequest) {
+        String token = obj.login(loginRequest.getEmail(), loginRequest.getPassword());
+        return ResponseEntity.ok(token);
     }
 
 

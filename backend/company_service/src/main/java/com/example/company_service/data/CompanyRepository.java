@@ -3,6 +3,7 @@ package com.example.company_service.data;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     boolean existsByName(String name);
 
     boolean existsByPhoneNum(String phoneNum);
+
+    Optional<Company> findByEmail(String email);
 }
