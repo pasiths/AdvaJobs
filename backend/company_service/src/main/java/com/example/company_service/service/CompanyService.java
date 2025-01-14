@@ -27,6 +27,30 @@ public class CompanyService {
     }
 
 
+    public String login(String email, String password) {
+        // Fetch company by email
+        Company company = cmpRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+
+        // Check if the account is active
+        if (company.getStatus() != 1) {
+            throw new RuntimeException("Account is inactive. Please contact support.");
+        }
+
+        // Verify password
+        if (!passwordEncoder.matches(password, company.getPassword())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        // Generate token (pseudo-implementation, replace with JWT or session token logic)
+        return "Login successful. Token: " + generateToken(email);
+    }
+
+    private String generateToken(String email) {
+        // Replace with actual token generation logic, e.g., using JWT
+        return email + "_" + System.currentTimeMillis();
+    }
+
 //    public List<Company> getCompanies(){
 //        return cmpRepo.findAll();
 //    }
