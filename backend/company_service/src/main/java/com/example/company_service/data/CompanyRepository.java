@@ -19,6 +19,9 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     @Query("SELECT c FROM Company c WHERE c.industry = :industry AND c.status = 1")
     List<Company> findCompaniesByIndustry(@Param("industry") String industry);
 
+    @Query("SELECT c FROM Company c WHERE LOWER(c.name) LIKE :startsWith AND c.status = 1")
+    List<Company> findCompaniesByStartingLetter(@Param("startsWith") String startsWith);
+
     boolean existsByEmail(String email);
 
     boolean existsByName(String name);

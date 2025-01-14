@@ -47,6 +47,23 @@ public class CompanyController {
         }
     }
 
+    @GetMapping(path = "/companies", params = "startsWith")
+    public ResponseEntity<?> getCompaniesByStartingLetter(@RequestParam String startsWith) {
+        try {
+            List<Company> companies = obj.getCompaniesByStartingLetter(startsWith);
+
+            if (companies.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No companies found starting with: " + startsWith);
+            }
+
+            return ResponseEntity.ok(companies);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while fetching companies: " + e.getMessage());
+        }
+    }
+
 
     // New endpoint for creating a company
     @PostMapping(path = "/companies")
