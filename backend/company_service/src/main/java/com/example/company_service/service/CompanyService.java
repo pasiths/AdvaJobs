@@ -100,6 +100,10 @@ public class CompanyService {
         return companies;
     }
 
+    public List<Company> getCompaniesByStartingLetter(String startsWith) {
+        return cmpRepo.findCompaniesByStartingLetter(startsWith.toLowerCase() + "%");
+    }
+
 
 
 //    public Company createCompany(Company company) {
