@@ -20,23 +20,52 @@ public class CompanyService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<Company> getCompanies(){
-        return cmpRepo.findAll();
-    }
-
-    public Company getCompanyById(int id){
-        Optional<Company> company = cmpRepo.findById(id);
-
-        if(company.isPresent()){
-            return company.get();
+    private void ensureActiveStatus(Company company) {
+        if (company.getStatus() != 1) {
+            throw new RuntimeException("Operation not allowed. The company is not active.");
         }
-        return null;
     }
 
-    public List<Company> getCompanyByName(String name)
-    {
-        return cmpRepo.getCompanyByName(name);
+
+//    public List<Company> getCompanies(){
+//        return cmpRepo.findAll();
+//    }
+
+    public List<Company> getCompanies() {
+        return cmpRepo.findAll().stream()
+                .filter(company -> company.getStatus() == 1) // Only active companies
+                .toList();
     }
+
+
+//    public Company getCompanyById(int id){
+//        Optional<Company> company = cmpRepo.findById(id);
+//
+//        if(company.isPresent()){
+//            return company.get();
+//        }
+//        return null;
+//    }
+
+    public Company getCompanyById(int id) {
+        Company company = cmpRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Company with ID " + id + " not found"));
+        ensureActiveStatus(company); // Check if the company is active
+        return company;
+    }
+
+
+//    public List<Company> getCompanyByName(String name)
+//    {
+//        return cmpRepo.getCompanyByName(name);
+//    }
+
+    public List<Company> getCompanyByName(String name) {
+        return cmpRepo.getCompanyByName(name).stream()
+                .filter(company -> company.getStatus() == 1) // Only active companies
+                .toList();
+    }
+
 
 //    public Company createCompany(Company company) {
 //        // Create a new Company object
@@ -95,9 +124,13 @@ public class CompanyService {
 
 
     public Company updateCompany(int id, Company company) {
-        // Fetch the existing company from the database using the ID
+//        // Fetch the existing company from the database using the ID
+//        Company existingCompany = cmpRepo.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Company with ID " + id + " not found"));
+
         Company existingCompany = cmpRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Company with ID " + id + " not found"));
+        ensureActiveStatus(existingCompany); // Check if the company is active
 
         // Update only fields provided in the input
         if (company.getName() != null && !company.getName().isEmpty()) {
@@ -133,11 +166,19 @@ public class CompanyService {
         return cmpRepo.save(existingCompany);
     }
 
-    //Method to delete a company by ID
-    public void deleteCompany(int id){
-        Optional<Company> company=cmpRepo.findById(id);
-        if(company.isPresent()) {
-            cmpRepo.deleteById(id);
-        }
+//    //Method to delete a company by ID
+//    public void deleteCompany(int id){
+//        Optional<Company> company=cmpRepo.findById(id);
+//        if(company.isPresent()) {
+//            cmpRepo.deleteById(id);
+//        }
+//    }
+    public void deleteCompany(int id) {
+        Company company = cmpRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Company with ID " + id + " not found"));
+        ensureActiveStatus(company); // Check if the company is active
+        cmpRepo.deleteById(id);
     }
+
+
 }
