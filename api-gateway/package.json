@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "api-gateway": "file:",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "http-proxy-middleware": "^3.0.3",
     "winston": "^3.17.0",

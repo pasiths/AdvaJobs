@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class CompanyController {
 
     @Autowired
@@ -106,7 +107,7 @@ public class CompanyController {
         obj.deleteCompany(id);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/companies/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequest) {
         String token = obj.login(loginRequest.getEmail(), loginRequest.getPassword());
         return ResponseEntity.ok(token);

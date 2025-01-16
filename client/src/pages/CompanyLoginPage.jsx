@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
-import { Form, Button, Container } from "react-bootstrap";
-import ReCAPTCHA from "react-google-recaptcha";
+import { useState } from "react";
+import { Form, Button, Container, Spinner, Alert } from "react-bootstrap";
+import axios from "axios";
 
 const CompanyLoginPage = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +9,7 @@ const CompanyLoginPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
 
   // Validate form fields
   const validateForm = () => {
@@ -21,11 +22,44 @@ const CompanyLoginPage = () => {
 
   // Handle input changes
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: files ? files[0] : value,
+      [name]: value,
     }));
+  };
+
+  // Handle login
+  const handleLogin = async () => {
+    setLoading(true); // Show loading spinner
+    try {
+      const response = await axios.post("http://localhost:8082/company/companies/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Save response (e.g., token or user data) to localStorage
+      const { data } = response;
+      localStorage.setItem("companyToken", data.token); // Adjust the key and value as per API response
+      localStorage.setItem(
+        "companyDetails",
+        JSON.stringify(data.companyDetails)
+      ); // Save additional details if provided
+
+      // Notify user of success
+      alert("Login Successful!");
+
+      // Redirect or perform other actions as needed
+      window.location.href = "/"; // Replace with actual dashboard route
+    } catch (error) {
+      // Set error message and clear it after 5 seconds
+      setErrorMessage(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
+      setTimeout(() => setErrorMessage(""), 5000); // Clear error after 5 seconds
+    } finally {
+      setLoading(false); // Hide loading spinner
+    }
   };
 
   // Handle form submission
@@ -35,6 +69,10 @@ const CompanyLoginPage = () => {
     // Validate the form
     const errors = validateForm();
     setValidationErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      handleLogin(); // Call login handler if no validation errors
+    }
   };
 
   return (
@@ -113,6 +151,16 @@ const CompanyLoginPage = () => {
               "LOG IN"
             )}
           </Button>
+          {/* Display Error Message */}
+          {errorMessage && (
+            <Alert
+              variant="danger"
+              onClose={() => setErrorMessage("")}
+              dismissible
+            >
+              {errorMessage}
+            </Alert>
+          )}
         </Form>
 
         {/* Register Link */}
