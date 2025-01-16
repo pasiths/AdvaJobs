@@ -1,10 +1,12 @@
-import  { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import ReCAPTCHA from "react-google-recaptcha";
 
 const CompanyLoginPage = () => {
   const [email, setEmail] = useState(""); // State for email
   const [password, setPassword] = useState(""); // State for password
+  const [confirmPassword, setConfirmPassword] = useState(""); // State for confirm password
+  const [passwordError, setPasswordError] = useState(""); // Error for password mismatch
   const recaptchaRef = useRef(null);
   const [recaptchaToken, setRecaptchaToken] = useState(null); // Store reCAPTCHA token
   const [loading, setLoading] = useState(false); // State for loading
@@ -12,6 +14,12 @@ const CompanyLoginPage = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setPasswordError(""); // Reset error
+    if (password !== confirmPassword) {
+      setPasswordError("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
     // Simulate a login process (replace with your login logic)
     setTimeout(() => {
@@ -56,6 +64,21 @@ const CompanyLoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)} // update state
             />
+          </Form.Group>
+
+          {/* Confirm Password Input */}
+          <Form.Group controlId="formConfirmPassword" className="mb-3">
+            <Form.Control
+              type="password"
+              placeholder="Confirm Password"
+              className="p-3"
+              style={{ backgroundColor: "#E0F2FF", border: "none" }}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)} // update state
+            />
+            {passwordError && (
+              <small className="text-danger">{passwordError}</small>
+            )}
           </Form.Group>
 
           {/* Forgot Password */}
