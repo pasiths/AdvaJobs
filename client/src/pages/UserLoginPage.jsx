@@ -10,7 +10,6 @@ const UserLoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   // Validate form fields
   const validateForm = () => {
@@ -84,10 +83,6 @@ const UserLoginPage = () => {
       <div className="w-100" style={{ maxWidth: "600px" }}>
         <h2 className="text-center mb-4">Job Seeker Log In</h2>
 
-        {/* Alert Messages */}
-        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
-        {successMessage && <Alert variant="success">{successMessage}</Alert>}
-
         {/* Login Form */}
         <Form onSubmit={handleSubmit}>
           {/* Email Input */}
@@ -154,6 +149,16 @@ const UserLoginPage = () => {
               "LOG IN"
             )}
           </Button>
+          {/* Display Error Message */}
+          {errorMessage && (
+            <Alert
+              variant="danger"
+              onClose={() => setErrorMessage("")}
+              dismissible
+            >
+              {errorMessage}
+            </Alert>
+          )}
         </Form>
 
         {/* Register Link */}
