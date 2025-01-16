@@ -44,10 +44,35 @@ public class Application {
     @Column(name = "job_id", nullable = false)
     private int jobId;
 
+//    @NotBlank(message = "Username is required")
+//    @Column(name = "username", nullable = false)
+//    private String username;
+
+    @Email(message = "Invalid email format")
+    @NotBlank(message = "Email is required")
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @NotBlank(message = "Name is required")
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Invalid telephone number format")
+    @NotBlank(message = "Telephone number is required")
+    @Column(name = "telephone_no", nullable = false)
+    private String telephoneNo;
+
+    @NotBlank(message = "Company name is required")
+    @Column(name = "company_name", nullable = false)
+    private String companyName;
+
+    @NotBlank(message = "Job title is required")
+    @Column(name = "job_title", nullable = false)
+    private String jobTitle;
+
     // Automatically set the current date for dateApplied before persisting the entity
     @PrePersist
     protected void onCreate() {
-        // Set dateApplied to the current system date and time
         if (dateApplied == null) {
             dateApplied = LocalDateTime.now();
         }
@@ -134,6 +159,57 @@ public class Application {
         this.jobId = jobId;
     }
 
-    public void setDeleted(boolean b) {
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getTelephoneNo() {
+        return telephoneNo;
+    }
+
+    public void setTelephoneNo(String telephoneNo) {
+        this.telephoneNo = telephoneNo;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public void setDeleted(boolean isDeleted) {
+        if (isDeleted) {
+            this.status = "DELETED";
+        }
     }
 }

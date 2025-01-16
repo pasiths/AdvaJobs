@@ -26,4 +26,20 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
     // Custom query to get applications by jobId
     @Query("SELECT a FROM Application a WHERE a.jobId = :jobId")
     List<Application> findApplicationsByJobId(@Param("jobId") int jobId);
+
+    // Find applications by email
+    @Query("SELECT a FROM Application a WHERE a.email = :email")
+    List<Application> findByEmail(@Param("email") String email);
+
+    // Find applications by applicant name
+    @Query("SELECT a FROM Application a WHERE a.name = :name")
+    List<Application> findByName(@Param("name") String name);
+
+    // Find applications by company name
+    @Query("SELECT a FROM Application a WHERE a.companyName = :companyName")
+    List<Application> findByCompanyName(@Param("companyName") String companyName);
+
+    // Find applications by job title
+    @Query("SELECT a FROM Application a WHERE a.jobTitle = :jobTitle")
+    List<Application> findByJobTitle(@Param("jobTitle") String jobTitle);
 }
