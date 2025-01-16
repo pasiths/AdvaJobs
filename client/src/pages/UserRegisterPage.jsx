@@ -3,33 +3,31 @@ import { Form, Button, Container, Spinner, Row, Col } from "react-bootstrap";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
-    full_name: "",
+    fullName: "",
     email: "",
     location: "",
-    phone_num: "",
+    phoneNum: "",
     gender: "",
-    profile_pic: null,
+    profilePic: null,
     cv: null,
     password: "",
     confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
-  const [jsonData, setJsonData] = useState([]);
-
-  // Fetch data.json during the initial load
-  useEffect(() => {
-    fetch("/data.json")
-      .then((response) => response.json())
-      .then((data) => setJsonData(data))
-      .catch((error) => console.error("Error loading JSON:", error));
-  }, []);
 
   // Validate form fields
   const validateForm = () => {
     const errors = {};
-    if (!formData.full_name.trim()) errors.full_name = "Full name is required.";
+    if (!formData.fullName.trim()) errors.fullName = "Full name is required.";
     if (!formData.email.trim()) errors.email = "Email is required.";
+    if (!formData.phoneNum.trim())
+      errors.phoneNum = "Phone number is required.";
+    if (!formData.location.trim()) errors.location = "Location is required.";
+    if (!formData.gender.trim()) errors.gender = "Select your gender.";
+    if (!formData.profilePic)
+      errors.profilePic = "Profile picture is required.";
+    if (!formData.cv) errors.cv = "CV is required.";
     if (formData.password.length < 8)
       errors.password = "Password must be at least 8 characters.";
     if (formData.password !== formData.confirmPassword)
@@ -53,21 +51,6 @@ const RegisterForm = () => {
     // Validate the form
     const errors = validateForm();
     setValidationErrors(errors);
-
-    if (Object.keys(errors).length > 0) return;
-
-    setLoading(true);
-
-    // Simulate saving data
-    const updatedData = [...jsonData, formData];
-    setJsonData(updatedData);
-
-    // Simulate delay
-    setTimeout(() => {
-      setLoading(false);
-      console.log("Updated JSON Data:", updatedData);
-      alert("Form submitted successfully!");
-    }, 2000);
   };
 
   return (
@@ -85,16 +68,16 @@ const RegisterForm = () => {
           <Form.Group controlId="formName" className="mb-3">
             <Form.Control
               type="text"
-              name="full_name"
-              value={formData.full_name}
+              name="fullName"
+              value={formData.fullName}
               onChange={handleChange}
               placeholder="Name"
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
-              isInvalid={!!validationErrors.full_name}
+              isInvalid={!!validationErrors.fullName}
             />
             <Form.Control.Feedback type="invalid">
-              {validationErrors.full_name}
+              {validationErrors.fullName}
             </Form.Control.Feedback>
           </Form.Group>
 
@@ -116,7 +99,7 @@ const RegisterForm = () => {
           </Form.Group>
 
           {/* Home Town Input */}
-          <Form.Group controlId="formHomeTown" className="mb-3">
+          <Form.Group controlId="formLocation" className="mb-3">
             <Form.Control
               type="text"
               name="location"
@@ -125,20 +108,28 @@ const RegisterForm = () => {
               placeholder="Home Town"
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
+              isInvalid={!!validationErrors.location}
             />
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.location}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Phone Input */}
-          <Form.Group controlId="formPhone" className="mb-3">
+          <Form.Group controlId="formPhoneNum" className="mb-3">
             <Form.Control
               type="text"
-              name="phone_num"
-              value={formData.phone_num}
+              name="phoneNum"
+              value={formData.phoneNum}
               onChange={handleChange}
               placeholder="Phone"
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
+              isInvalid={!!validationErrors.phoneNum}
             />
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.phoneNum}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Gender Radio Options */}
@@ -154,7 +145,7 @@ const RegisterForm = () => {
                 value="Male"
                 checked={formData.gender === "Male"}
                 onChange={handleChange}
-                required
+                isInvalid={!!validationErrors.gender}
               />
               <Form.Check
                 inline
@@ -165,7 +156,7 @@ const RegisterForm = () => {
                 value="Female"
                 checked={formData.gender === "Female"}
                 onChange={handleChange}
-                required
+                isInvalid={!!validationErrors.gender}
               />
               <Form.Check
                 inline
@@ -176,23 +167,31 @@ const RegisterForm = () => {
                 value="Other"
                 checked={formData.gender === "Other"}
                 onChange={handleChange}
+                isInvalid={!!validationErrors.gender}
               />
+              {validationErrors.gender && (
+                <div className="text-danger">{validationErrors.gender}</div>
+              )}
             </div>
           </Form.Group>
 
           {/* Profile Picture and CV Upload */}
           <Row>
             <Col>
-              <Form.Group controlId="formProfilePicture" className="mb-3">
+              <Form.Group controlId="formProfilePic" className="mb-3">
                 <Form.Label>Profile Picture:</Form.Label>
                 <Form.Control
                   type="file"
-                  name="profile_pic"
+                  name="profilePic"
                   accept="image/*"
                   onChange={handleChange}
                   className="p-2"
                   style={{ backgroundColor: "#E0F2FF", border: "none" }}
+                  isInvalid={!!validationErrors.profilePic}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {validationErrors.profilePic}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col>
@@ -205,7 +204,11 @@ const RegisterForm = () => {
                   onChange={handleChange}
                   className="p-2"
                   style={{ backgroundColor: "#E0F2FF", border: "none" }}
+                  isInvalid={!!validationErrors.cv}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {validationErrors.cv}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
