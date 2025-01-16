@@ -2,43 +2,48 @@ package com.application.application_service.controller;
 
 import com.application.application_service.data.Application;
 import com.application.application_service.service.ApplicationService;
+import com.application.application_service.dto.StatusUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.application.application_service.dto.StatusUpdateRequest;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/applications")
 public class ApplicationController {
 
     @Autowired
     private ApplicationService applicationService;
 
     // Get all applications
-    @GetMapping(path = "/applications")
-    public List<Application> getApplications() {
-        return applicationService.getApplications();
+    @GetMapping
+    public ResponseEntity<List<Application>> getApplications() {
+        List<Application> applications = applicationService.getApplications();
+        return ResponseEntity.ok(applications);
     }
 
     // Get application by ID
-    @GetMapping(path = "/applications/{id}")
-    public Application getApplicationById(@PathVariable int id) {
-        return applicationService.getApplicationById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Application> getApplicationById(@PathVariable int id) {
+        try {
+            Application application = applicationService.getApplicationById(id);
+            return ResponseEntity.ok(application);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     // Get applications by status
-    @GetMapping(path = "/applications", params = "status")
+    @GetMapping(params = "status")
     public ResponseEntity<?> getApplicationsByStatus(@RequestParam String status) {
         try {
             List<Application> applications = applicationService.getApplicationsByStatus(status);
-
             if (applications.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("No applications found with status: " + status);
             }
-
             return ResponseEntity.ok(applications);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -47,16 +52,14 @@ public class ApplicationController {
     }
 
     // Get applications by user ID
-    @GetMapping(path = "/applications", params = "userId")
+    @GetMapping(params = "userId")
     public ResponseEntity<?> getApplicationsByUser(@RequestParam int userId) {
         try {
             List<Application> applications = applicationService.getApplicationsByUser(userId);
-
             if (applications.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("No applications found for user ID: " + userId);
             }
-
             return ResponseEntity.ok(applications);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -65,38 +68,30 @@ public class ApplicationController {
     }
 
     // Get applications by company ID
-    @GetMapping(path = "/applications", params = "companyId")
+    @GetMapping(params = "companyId")
     public ResponseEntity<?> getApplicationsByCompany(@RequestParam int companyId) {
         try {
-            // Fetch applications by company ID using the repository method
             List<Application> applications = applicationService.getApplicationsByCompany(companyId);
-
             if (applications.isEmpty()) {
-                // If no applications are found, return a 404 response
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("No applications found for company ID: " + companyId);
             }
-
-            // If applications are found, return them in the response
             return ResponseEntity.ok(applications);
         } catch (Exception e) {
-            // Handle any errors and return an internal server error response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while fetching applications: " + e.getMessage());
         }
     }
 
-    // Get applications by jobId
-    @GetMapping(path = "/applications", params = "jobId")
+    // Get applications by job ID
+    @GetMapping(params = "jobId")
     public ResponseEntity<?> getApplicationsByJobId(@RequestParam int jobId) {
         try {
             List<Application> applications = applicationService.getApplicationsByJobId(jobId);
-
             if (applications.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("No applications found for job ID: " + jobId);
             }
-
             return ResponseEntity.ok(applications);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -104,98 +99,94 @@ public class ApplicationController {
         }
     }
 
-    // Create a new application
-    @PostMapping(path = "/applications")
-    public Application createApplication(@RequestBody Application application) {
-        return applicationService.createApplication(application);
+    // Get applications by email
+    @GetMapping(params = "email")
+    public ResponseEntity<?> getApplicationsByEmail(@RequestParam String email) {
+        List<Application> applications = applicationService.getApplicationsByEmail(email);
+
+        if (applications.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No applications found with email: " + email);
+        }
+        return ResponseEntity.ok(applications);
     }
 
-//    // Update application status
-//    @PutMapping(path = "/applications/{id}/status")
-//    public ResponseEntity<?> updateApplicationStatus(@PathVariable int id, @RequestParam String status) {
-//        try {
-//            Application updatedApplication = applicationService.updateApplicationStatus(id, status);
-//            return ResponseEntity.ok(updatedApplication);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("An error occurred while updating application status: " + e.getMessage());
-//        }
-//    }
+    // Get applications by name
+    @GetMapping(params = "name")
+    public ResponseEntity<?> getApplicationsByName(@RequestParam String name) {
+        List<Application> applications = applicationService.getApplicationsByName(name);
 
-//    // Update application status
-//    @PutMapping(path = "/applications/{id}", params = "status")
-//    public ResponseEntity<?> updateApplicationStatus(@PathVariable int id, @RequestParam String status) {
-//        try {
-//            // Call the service to update the application status
-//            Application updatedApplication = applicationService.updateApplicationStatus(id, status);
-//
-//            // Return the updated application with a 200 OK status
-//            return ResponseEntity.ok(updatedApplication);
-//        } catch (Exception e) {
-//            // Handle any exceptions and return an internal server error
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("An error occurred while updating application status: " + e.getMessage());
-//        }
-//    }
+        if (applications.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No applications found with name: " + name);
+        }
+        return ResponseEntity.ok(applications);
+    }
 
-    @PutMapping("/applications/{id}")
-    public ResponseEntity<Application> updateApplicationStatus(@PathVariable int id, @RequestBody StatusUpdateRequest statusRequest) {
+    // Get applications by company name
+    @GetMapping(params = "companyName")
+    public ResponseEntity<?> getApplicationsByCompanyName(@RequestParam String companyName) {
+        List<Application> applications = applicationService.getApplicationsByCompanyName(companyName);
+
+        if (applications.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No applications found with company name: " + companyName);
+        }
+        return ResponseEntity.ok(applications);
+    }
+
+    // Get applications by job title
+    @GetMapping(params = "jobTitle")
+    public ResponseEntity<?> getApplicationsByJobTitle(@RequestParam String jobTitle) {
+        List<Application> applications = applicationService.getApplicationsByJobTitle(jobTitle);
+
+        if (applications.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No applications found with job title: " + jobTitle);
+        }
+        return ResponseEntity.ok(applications);
+    }
+
+    // Create a new application
+    @PostMapping
+    public ResponseEntity<?> createApplication(@RequestBody Application application) {
         try {
-            // Extract the 'status' from the request body
-            String status = statusRequest.getStatus();
-
-            // Validate the status (optional, but good practice)
-            if (status == null || status.isEmpty()) {
-                return ResponseEntity.badRequest().body(null);  // Return bad request if status is missing or empty
-            }
-
-            // Call the service to update the application status
-            Application updatedApplication = applicationService.updateApplicationStatus(id, status);
-
-            // Return the updated application with a 200 OK status
-            return ResponseEntity.ok(updatedApplication);
+            Application createdApplication = applicationService.createApplication(application);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdApplication);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            // Handle any exceptions and return an internal server error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);  // Return null in case of error, the error message can be handled globally
+                    .body("An error occurred while creating the application: " + e.getMessage());
         }
     }
 
+    // Update application status
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateApplicationStatus(@PathVariable int id, @RequestBody StatusUpdateRequest statusRequest) {
+        try {
+            String status = statusRequest.getStatus();
+            if (status == null || status.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Status is required to update the application");
+            }
+            Application updatedApplication = applicationService.updateApplicationStatus(id, status);
+            return ResponseEntity.ok(updatedApplication);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while updating application status: " + e.getMessage());
+        }
+    }
 
-    // Soft delete application (update status to DELETED)
-    @DeleteMapping(path = "/applications/{id}")
-    public ResponseEntity<?> markApplicationAsDeleted(@PathVariable int id) {
+    // Soft delete application (mark as DELETED)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteApplication(@PathVariable int id) {
         try {
             Application deletedApplication = applicationService.deleteApplication(id);
             return ResponseEntity.ok(deletedApplication);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while marking application as deleted: " + e.getMessage());
+                    .body("An error occurred while deleting the application: " + e.getMessage());
         }
     }
-
-//    // Mark application as deleted
-//    @PutMapping(path = "/applications/{id}/delete")
-//    public ResponseEntity<?> markApplicationAsDeleted(@PathVariable int id) {
-//        try {
-//            Application deletedApplication = applicationService.markApplicationAsDeleted(id);
-//            return ResponseEntity.ok(deletedApplication);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("An error occurred while marking application as deleted: " + e.getMessage());
-//        }
-//    }
-
-//    // Delete application
-//    @DeleteMapping(path = "/applications/{id}")
-//    public ResponseEntity<String> deleteApplication(@PathVariable int id) {
-//        try {
-//            applicationService.deleteApplication(id);
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("An error occurred while deleting application: " + e.getMessage());
-//        }
-//    }
-
 }
