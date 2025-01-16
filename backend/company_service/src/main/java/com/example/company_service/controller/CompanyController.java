@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = "http://localhost:3000")
 public class CompanyController {
 
     @Autowired
     private CompanyService obj;
 
     @GetMapping(path = "/companies")
-    public List<Company> getCompanies(){
+    public List<Company> getCompanies() {
         return obj.getCompanies();
     }
 
     @GetMapping(path = "/companies/{id}")
-    public Company getCompanyById(@PathVariable int id){
+    public Company getCompanyById(@PathVariable int id) {
         return obj.getCompanyById(id);
     }
 
@@ -83,17 +83,18 @@ public class CompanyController {
         }
     }
 
-
     // New endpoint for creating a company
     @PostMapping(path = "/companies")
     public Company createCompany(@RequestBody Company company) {
+        System.out.println("hello");
         return obj.createCompany(company);
     }
 
-//    @PutMapping (path = "/companies/{id}")
-//    public Company updateCompany(@PathVariable int id,@RequestBody Company company){
-//        return obj.updateCompany(id,company);
-//    }
+    // @PutMapping (path = "/companies/{id}")
+    // public Company updateCompany(@PathVariable int id,@RequestBody Company
+    // company){
+    // return obj.updateCompany(id,company);
+    // }
 
     // Update company endpoint
     @PutMapping("/companies/{id}")
@@ -103,7 +104,7 @@ public class CompanyController {
     }
 
     @DeleteMapping(path = "/companies/{id}")
-    public void deleteCompany(@PathVariable int id){
+    public void deleteCompany(@PathVariable int id) {
         obj.deleteCompany(id);
     }
 
@@ -112,6 +113,5 @@ public class CompanyController {
         String token = obj.login(loginRequest.getEmail(), loginRequest.getPassword());
         return ResponseEntity.ok(token);
     }
-
 
 }
