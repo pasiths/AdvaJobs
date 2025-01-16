@@ -58,6 +58,35 @@ public class Jobs {
     @Positive(message = "Salary must be a positive number")
     private double salary;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status = Status.Active; // Default value
+
+    @Column(name = "company_name", nullable = false, length = 255)
+    @NotBlank(message = "Company name is mandatory")
+    @Size(max = 255, message = "Company name must not exceed 255 characters")
+    private String company_Name;
+
+    @Column(name = "company_id", nullable = false)
+    @NotNull(message = "Company ID is mandatory")
+    private int company_Id;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
     // Getters and Setters
     public int getId() {
         return id;
@@ -139,24 +168,20 @@ public class Jobs {
         this.salary = salary;
     }
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private Status status = Status.Active; // Default value
-
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+    public String getcompany_Name() {
+        return company_Name;
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    public void setcompany_Name(String company_Name) {
+        this.company_Name = company_Name;
+    }
+
+    public int getcompany_Id() {
+        return company_Id;
+    }
+
+    public void setcompany_Id(int company_Id) {
+        this.company_Id = company_Id;
     }
 
     public Status getStatus() {
