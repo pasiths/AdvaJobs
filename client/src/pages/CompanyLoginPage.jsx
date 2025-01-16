@@ -33,7 +33,7 @@ const CompanyLoginPage = () => {
   const handleLogin = async () => {
     setLoading(true); // Show loading spinner
     try {
-      const response = await axios.post("http://localhost:8082/company/companies/login", {
+      const response = await axios.post("/api/company/companies/login", {
         email: formData.email,
         password: formData.password,
       });
