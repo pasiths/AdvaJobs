@@ -1,43 +1,40 @@
 import { useRef, useState } from "react";
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button, Container, Spinner } from "react-bootstrap";
 import ReCAPTCHA from "react-google-recaptcha";
 
 const UserLoginPage = () => {
-  const recaptchaRef = useRef(null);
-  const [email, setEmail] = useState(""); // email state
-  const [password, setPassword] = useState(""); // password state
-  const [loading, setLoading] = useState(false); // loading state
-  const [recaptchaToken, setRecaptchaToken] = useState(null); // reCAPTCHA token state
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
-  // Handle reCAPTCHA change
-  const onRecaptchaChange = (token) => {
-    setRecaptchaToken(token);
+  // Validate form fields
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.email.trim()) errors.email = "Email is required.";
+    if (formData.password.length < 8)
+      errors.password = "Password must be at least 8 characters.";
+    return errors;
+  };
+
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: files ? files[0] : value,
+    }));
   };
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      alert("Please fill in all fields.");
-      return;
-    }
-
-    setLoading(true);
-
-    // Simulate login logic (Replace this with your API call)
-    setTimeout(() => {
-      console.log("Logged in successfully with", { email, password });
-      setLoading(false);
-    }, 2000);
-  };
-
-  // Reset form fields
-  const handleReset = () => {
-    setEmail("");
-    setPassword("");
-    recaptchaRef.current?.reset();
-    setRecaptchaToken(null);
+    // Validate the form
+    const errors = validateForm();
+    setValidationErrors(errors);
   };
 
   return (
@@ -52,28 +49,36 @@ const UserLoginPage = () => {
         <Form onSubmit={handleSubmit}>
           {/* Email Input */}
           <Form.Group controlId="formEmail" className="mb-3">
-            <Form.Label className="sr-only">Email</Form.Label>
             <Form.Control
               type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               placeholder="Email"
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              isInvalid={!!validationErrors.email}
             />
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.email}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Password Input */}
           <Form.Group controlId="formPassword" className="mb-3">
-            <Form.Label className="sr-only">Password</Form.Label>
             <Form.Control
               type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               placeholder="Password"
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              isInvalid={!!validationErrors.password}
             />
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.password}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Forgot Password */}
@@ -81,17 +86,10 @@ const UserLoginPage = () => {
             <a href="#" className="text-muted">
               Forgot Password?
             </a>
-            <a href="#" className="text-primary" onClick={handleReset}>
+            <a href="#" className="text-primary" onClick={""}>
               Reset
             </a>
           </div>
-
-          {/* reCAPTCHA */}
-          <ReCAPTCHA
-            ref={recaptchaRef}
-            sitekey="6Le0oUYqAAAAAJNvvKKCKMIdIFC7AQwT1QRKoZyt"
-            onChange={onRecaptchaChange}
-          />
 
           {/* Login Button */}
           <Button
@@ -99,9 +97,21 @@ const UserLoginPage = () => {
             className="w-100 p-3"
             style={{ backgroundColor: "#144B7D", border: "none" }}
             type="submit"
-            disabled={loading || !recaptchaToken}
           >
-            {loading ? "Loading..." : "LOG IN"}
+            {loading ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                {" Logging in..."}
+              </>
+            ) : (
+              "LOG IN"
+            )}
           </Button>
         </Form>
 

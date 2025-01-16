@@ -3,33 +3,38 @@ import { Form, Button, Container } from "react-bootstrap";
 import ReCAPTCHA from "react-google-recaptcha";
 
 const CompanyLoginPage = () => {
-  const [email, setEmail] = useState(""); // State for email
-  const [password, setPassword] = useState(""); // State for password
-  const [confirmPassword, setConfirmPassword] = useState(""); // State for confirm password
-  const [passwordError, setPasswordError] = useState(""); // Error for password mismatch
-  const recaptchaRef = useRef(null);
-  const [recaptchaToken, setRecaptchaToken] = useState(null); // Store reCAPTCHA token
-  const [loading, setLoading] = useState(false); // State for loading
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setPasswordError(""); // Reset error
-    if (password !== confirmPassword) {
-      setPasswordError("Passwords do not match.");
-      return;
-    }
-
-    setLoading(true);
-    // Simulate a login process (replace with your login logic)
-    setTimeout(() => {
-      console.log("Login successful with", { email, password });
-      setLoading(false);
-    }, 2000);
+  // Validate form fields
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.email.trim()) errors.email = "Email is required.";
+    if (formData.password.length < 8)
+      errors.password = "Password must be at least 8 characters.";
+    return errors;
   };
 
-  const onRecaptchaChange = (token) => {
-    setRecaptchaToken(token);
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: files ? files[0] : value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Validate the form
+    const errors = validateForm();
+    setValidationErrors(errors);
   };
 
   return (
@@ -46,39 +51,34 @@ const CompanyLoginPage = () => {
           <Form.Group controlId="formEmail" className="mb-3">
             <Form.Control
               type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               placeholder="Email"
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)} // update state
+              isInvalid={!!validationErrors.email}
             />
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.email}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Password Input */}
           <Form.Group controlId="formPassword" className="mb-3">
             <Form.Control
               type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               placeholder="Password"
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)} // update state
+              isInvalid={!!validationErrors.password}
             />
-          </Form.Group>
-
-          {/* Confirm Password Input */}
-          <Form.Group controlId="formConfirmPassword" className="mb-3">
-            <Form.Control
-              type="password"
-              placeholder="Confirm Password"
-              className="p-3"
-              style={{ backgroundColor: "#E0F2FF", border: "none" }}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)} // update state
-            />
-            {passwordError && (
-              <small className="text-danger">{passwordError}</small>
-            )}
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.password}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Forgot Password */}
@@ -86,17 +86,10 @@ const CompanyLoginPage = () => {
             <a href="#" className="text-muted">
               Forgot Password?
             </a>
-            <a href="#" className="text-primary">
+            <a href="#" className="text-primary" onClick={""}>
               Reset
             </a>
           </div>
-
-          {/* reCAPTCHA */}
-          <ReCAPTCHA
-            ref={recaptchaRef} // Assign ref to reset the widget
-            sitekey="6Le0oUYqAAAAAJNvvKKCKMIdIFC7AQwT1QRKoZyt"
-            onChange={onRecaptchaChange}
-          />
 
           {/* Login Button */}
           <Button
@@ -104,9 +97,21 @@ const CompanyLoginPage = () => {
             className="w-100 p-3"
             style={{ backgroundColor: "#144B7D", border: "none" }}
             type="submit"
-            disabled={loading || !recaptchaToken} // Disable button if loading or no reCAPTCHA token
           >
-            {loading ? "Loading..." : "LOG IN"}
+            {loading ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                {" Logging in..."}
+              </>
+            ) : (
+              "LOG IN"
+            )}
           </Button>
         </Form>
 

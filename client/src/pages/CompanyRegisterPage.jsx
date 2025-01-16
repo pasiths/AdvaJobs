@@ -1,6 +1,57 @@
-import { Button, Container, Form } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Container, Form, Alert } from "react-bootstrap";
 
 const CompanyRegisterPage = () => {
+  const [formData, setFormData] = useState({
+    companyName: "",
+    email: "",
+    address: "",
+    phone: "",
+    industry: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [validationErrors, setValidationErrors] = useState({});
+
+  // Validate form fields
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.companyName.trim())
+      errors.companyName = "Company name is required.";
+    if (!formData.email.trim()) errors.email = "Email is required.";
+    if (!formData.address.trim()) errors.address = "Address is required.";
+    if (!formData.phone.trim()) errors.phone = "Phone number is required.";
+    if (!formData.industry.trim()) errors.industry = "Industry is required.";
+    if (formData.password.length < 8)
+      errors.password = "Password must be at least 8 characters.";
+    if (formData.password !== formData.confirmPassword)
+      errors.confirmPassword = "Passwords do not match.";
+    return errors;
+  };
+
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Validate the form
+    const errors = validateForm();
+    setValidationErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      alert("Form submitted successfully!");
+      // Add API call logic here
+    }
+  };
+
   return (
     <Container
       className="d-flex justify-content-center align-items-center"
@@ -10,15 +61,22 @@ const CompanyRegisterPage = () => {
         <h2 className="text-center mb-4">Register as Company</h2>
         <br />
 
-        <Form>
+        <Form onSubmit={handleSubmit}>
           {/* Company Name Input */}
           <Form.Group controlId="formCompanyName" className="mb-3">
             <Form.Control
               type="text"
               placeholder="Company Name"
+              name="companyName"
+              value={formData.companyName}
+              onChange={handleChange}
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
+              isInvalid={!!validationErrors.companyName}
             />
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.companyName}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Email Input */}
@@ -26,9 +84,16 @@ const CompanyRegisterPage = () => {
             <Form.Control
               type="email"
               placeholder="Email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
+              isInvalid={!!validationErrors.email}
             />
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.email}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Address Input */}
@@ -36,9 +101,16 @@ const CompanyRegisterPage = () => {
             <Form.Control
               type="text"
               placeholder="Address"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
+              isInvalid={!!validationErrors.address}
             />
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.address}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Phone Input */}
@@ -46,9 +118,16 @@ const CompanyRegisterPage = () => {
             <Form.Control
               type="text"
               placeholder="Phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
+              isInvalid={!!validationErrors.phone}
             />
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.phone}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Industry Input */}
@@ -56,9 +135,16 @@ const CompanyRegisterPage = () => {
             <Form.Control
               type="text"
               placeholder="Industry"
+              name="industry"
+              value={formData.industry}
+              onChange={handleChange}
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
+              isInvalid={!!validationErrors.industry}
             />
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.industry}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Password Input */}
@@ -66,12 +152,19 @@ const CompanyRegisterPage = () => {
             <Form.Control
               type="password"
               placeholder="Password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
+              isInvalid={!!validationErrors.password}
             />
             <Form.Text>
               Password should be comprised of at least 8 characters
             </Form.Text>
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.password}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Confirm Password Input */}
@@ -79,9 +172,16 @@ const CompanyRegisterPage = () => {
             <Form.Control
               type="password"
               placeholder="Confirm Password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
               className="p-3"
               style={{ backgroundColor: "#E0F2FF", border: "none" }}
+              isInvalid={!!validationErrors.confirmPassword}
             />
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.confirmPassword}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Create Account Button */}
@@ -89,6 +189,7 @@ const CompanyRegisterPage = () => {
             variant="primary"
             className="w-100 p-3"
             style={{ backgroundColor: "#144B7D", border: "none" }}
+            type="submit"
           >
             CREATE ACCOUNT
           </Button>
