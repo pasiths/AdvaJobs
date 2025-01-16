@@ -30,6 +30,39 @@ const UserLoginPage = () => {
     }));
   };
 
+  // Handle login
+  const handleLogin = async () => {
+    setLoading(true); // Show loading spinner
+    try {
+      const response = await axios.post("/api/user/users/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Save response (e.g., token or user data) to localStorage
+      const { data } = response;
+      localStorage.setItem("companyToken", data.token); // Adjust the key and value as per API response
+      localStorage.setItem(
+        "companyDetails",
+        JSON.stringify(data.companyDetails)
+      ); // Save additional details if provided
+
+      // Notify user of success
+      alert("Login Successful!");
+
+      // Redirect or perform other actions as needed
+      window.location.href = "/"; // Replace with actual dashboard route
+    } catch (error) {
+      // Set error message and clear it after 5 seconds
+      setErrorMessage(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
+      setTimeout(() => setErrorMessage(""), 5000); // Clear error after 5 seconds
+    } finally {
+      setLoading(false); // Hide loading spinner
+    }
+  };
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,6 +70,10 @@ const UserLoginPage = () => {
     // Validate the form
     const errors = validateForm();
     setValidationErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      handleLogin(); // Call login handler if no validation errors
+    }
   };
 
   return (
