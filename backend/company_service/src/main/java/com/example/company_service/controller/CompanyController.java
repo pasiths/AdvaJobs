@@ -86,7 +86,6 @@ public class CompanyController {
     // New endpoint for creating a company
     @PostMapping(path = "/companies")
     public Company createCompany(@RequestBody Company company) {
-        System.out.println("hello");
         return obj.createCompany(company);
     }
 
