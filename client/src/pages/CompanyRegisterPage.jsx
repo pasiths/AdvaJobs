@@ -1,5 +1,6 @@
+import axios from "axios";
 import { useState } from "react";
-import { Button, Container, Form, Alert } from "react-bootstrap";
+import { Button, Container, Form, Alert, Spinner } from "react-bootstrap";
 
 const CompanyRegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,9 @@ const CompanyRegisterPage = () => {
     confirmPassword: "",
   });
   const [validationErrors, setValidationErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // State for success message
+  const [loading, setLoading] = useState(false); // State for loading spinner
 
   // Validate form fields
   const validateForm = () => {
@@ -39,6 +43,44 @@ const CompanyRegisterPage = () => {
   };
 
   // Handle form submission
+  const handleRegister = async () => {
+    setLoading(true); // Show loading spinner
+    try {
+      const response = await axios.post(
+        "/api/company/companies", // Ensure the protocol and endpoint are correct
+        {
+          name: formData.companyName,
+          email: formData.email,
+          location: formData.address,
+          phoneNum: formData.phone,
+          industry: formData.industry,
+          password: formData.password,
+          logo: "https://via.placeholder.com/150", // Placeholder image URL
+          logoType: "image/png", // Placeholder image type
+        }
+      );
+
+      const { data } = response;
+      localStorage.setItem("companyToken", data.token);
+      localStorage.setItem(
+        "companyDetails",
+        JSON.stringify(data.companyDetails)
+      );
+
+      setSuccessMessage("Registration successful! Redirecting...");
+      setTimeout(() => (window.location.href = "/"), 3000); // Redirect after 3 seconds
+    } catch (error) {
+      setErrorMessage(
+        error.response?.data?.message ||
+          "Registration failed. Please try again."
+      );
+      setTimeout(() => setErrorMessage(""), 5000); // Clear error after 5 seconds
+    } finally {
+      setLoading(false); // Hide loading spinner
+    }
+  };
+
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -47,8 +89,7 @@ const CompanyRegisterPage = () => {
     setValidationErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      alert("Form submitted successfully!");
-      // Add API call logic here
+      handleRegister(); // Call register handler if no validation errors
     }
   };
 
@@ -191,8 +232,45 @@ const CompanyRegisterPage = () => {
             style={{ backgroundColor: "#144B7D", border: "none" }}
             type="submit"
           >
-            CREATE ACCOUNT
+            {loading ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+                {"Creating Account..."}
+              </>
+            ) : (
+              "CREATE ACCOUNT"
+            )}
           </Button>
+
+          {/* Display Error Message */}
+          {errorMessage && (
+            <Alert
+              variant="danger"
+              onClose={() => setErrorMessage("")}
+              dismissible
+              className="mt-3"
+            >
+              {errorMessage}
+            </Alert>
+          )}
+
+          {/* Display Success Message */}
+          {successMessage && (
+            <Alert
+              variant="success"
+              onClose={() => setSuccessMessage("")}
+              dismissible
+              className="mt-3"
+            >
+              {successMessage}
+            </Alert>
+          )}
         </Form>
 
         {/* Sign In Section */}

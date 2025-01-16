@@ -94,7 +94,7 @@ public class UserService {
         if (us.getIsVerified() == VerificationStatus.Unverified) {
             String otp = otpUtil.generateOtp(us.getEmail());
 
-//            sendEmail.sendOtpEmail(us.getEmail(), otp);
+            sendEmail.sendOtpEmail(us.getEmail(), otp);
         }
 
         return us;
