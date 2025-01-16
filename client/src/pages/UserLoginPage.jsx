@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
-import { Form, Button, Container, Spinner } from "react-bootstrap";
-import ReCAPTCHA from "react-google-recaptcha";
+import { useState } from "react";
+import { Form, Button, Container, Spinner, Alert } from "react-bootstrap";
+import axios from "axios";
 
 const UserLoginPage = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +9,8 @@ const UserLoginPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Validate form fields
   const validateForm = () => {
@@ -21,10 +23,10 @@ const UserLoginPage = () => {
 
   // Handle input changes
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: files ? files[0] : value,
+      [name]: value,
     }));
   };
 
@@ -44,6 +46,10 @@ const UserLoginPage = () => {
     >
       <div className="w-100" style={{ maxWidth: "600px" }}>
         <h2 className="text-center mb-4">Job Seeker Log In</h2>
+
+        {/* Alert Messages */}
+        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+        {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
         {/* Login Form */}
         <Form onSubmit={handleSubmit}>
@@ -86,9 +92,6 @@ const UserLoginPage = () => {
             <a href="#" className="text-muted">
               Forgot Password?
             </a>
-            <a href="#" className="text-primary" onClick={""}>
-              Reset
-            </a>
           </div>
 
           {/* Login Button */}
@@ -97,6 +100,7 @@ const UserLoginPage = () => {
             className="w-100 p-3"
             style={{ backgroundColor: "#144B7D", border: "none" }}
             type="submit"
+            disabled={loading}
           >
             {loading ? (
               <>

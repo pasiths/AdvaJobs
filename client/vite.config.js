@@ -7,13 +7,31 @@ export default defineConfig({
   server: {
     host: true,
     port: Number(process.env.PORT) || 3000,
-    proxy: {
-      "/api": {
-        target: process.env.VITE_API_URL, // Replace with your backend URL
-        changeOrigin: true,
-        // prependPath: true, // Ensure this is configured properly
-        rewrite: (path) => path.replace(/^\/api/, ""),
-      },
-    },
+    // proxy: {
+    //   // Proxy for User Microservice
+    //   "/user/": {
+    //     target: "http://localhost:8081",
+    //     changeOrigin: true,
+    //     rewrite: (path) => path.replace(/^\/user/, ""), // Removes `/user` from the path
+    //   },
+      //   // Proxy for Company Microservice
+      //   "/company": {
+      //     target: "http://localhost:8082/company",
+      //     changeOrigin: true,
+      //     rewrite: (path) => path.replace(/^\/api\/companiesms/, ""),
+      //   },
+      //   // Proxy for Job Microservice
+      //   "/api/jobsms": {
+      //     target: "http://localhost:8083",
+      //     changeOrigin: true,
+      //     rewrite: (path) => path.replace(/^\/api\/jobsms/, ""),
+      //   },
+      //   // Proxy for Application Microservice
+      //   "/api/applicationsms": {
+      //     target: "http://localhost:8084",
+      //     changeOrigin: true,
+      //     rewrite: (path) => path.replace(/^\/api\/applicationsms/, ""),
+      //   },
+    // },
   },
 });

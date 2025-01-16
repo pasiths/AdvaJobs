@@ -1,9 +1,16 @@
-import express from 'express';
-import { createProxyMiddleware } from 'http-proxy-middleware';
-import logger from './logger.js';
-
+import express from "express";
+import { createProxyMiddleware } from "http-proxy-middleware";
+import logger from "./logger.js";
+import cors from "cors";
 
 const app = express();
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000"], // Allow both Vite frontend URLs
+// credentials: true,
+  })
+);
 
 // Middleware to log all incoming requests
 app.use((req, res, next) => {
@@ -19,7 +26,7 @@ app.use((err, req, res, next) => {
 
 // User Microservice
 app.use(
-  "/api/users",
+  "/api/user",
   createProxyMiddleware({
     target: "http://localhost:8081/user",
     changeOrigin: true,
@@ -33,7 +40,7 @@ app.use(
 
 // Company Microservice
 app.use(
-  "/api/companies",
+  "/api/company",
   createProxyMiddleware({
     target: "http://localhost:8082/company",
     changeOrigin: true,
@@ -61,7 +68,7 @@ app.use(
 
 // Application Microservice
 app.use(
-  "/api/applications",
+  "/api/application",
   createProxyMiddleware({
     target: "http://localhost:8084/application",
     changeOrigin: true,
@@ -74,6 +81,6 @@ app.use(
 );
 
 // Start the API Gateway
-app.listen(8000, () => {
-  logger.info("API Gateway is running on http://localhost:8000");
+app.listen(8080, () => {
+  logger.info("API Gateway is running on http://localhost:8080");
 });
