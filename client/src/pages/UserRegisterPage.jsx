@@ -1,5 +1,14 @@
-import { useState, useEffect } from "react";
-import { Form, Button, Container, Spinner, Row, Col } from "react-bootstrap";
+import { useState } from "react";
+import {
+  Form,
+  Button,
+  Container,
+  Spinner,
+  Row,
+  Col,
+  Alert,
+} from "react-bootstrap";
+import axios from "axios";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -13,16 +22,20 @@ const RegisterForm = () => {
     password: "",
     confirmPassword: "",
   });
-  const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [previewPic, setPreviewPic] = useState(null);
 
   // Validate form fields
   const validateForm = () => {
     const errors = {};
     if (!formData.fullName.trim()) errors.fullName = "Full name is required.";
-    if (!formData.email.trim()) errors.email = "Email is required.";
-    if (!formData.phoneNum.trim())
-      errors.phoneNum = "Phone number is required.";
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
+      errors.email = "Enter a valid email address.";
+    if (!/^[0-9]{10,15}$/.test(formData.phoneNum))
+      errors.phoneNum = "Enter a valid phone number.";
     if (!formData.location.trim()) errors.location = "Location is required.";
     if (!formData.gender.trim()) errors.gender = "Select your gender.";
     if (!formData.profilePic)
@@ -42,15 +55,57 @@ const RegisterForm = () => {
       ...prevData,
       [name]: files ? files[0] : value,
     }));
+
+    if (name === "profilePic" && files[0]) {
+      setPreviewPic(URL.createObjectURL(files[0]));
+    }
+  };
+
+  // Handle form submission
+  const handleRegister = async () => {
+    setLoading(true);
+    const formDataObj = new FormData();
+    Object.keys(formData).forEach((key) => {
+      formDataObj.append(key, formData[key]);
+    });
+
+    try {
+      const response = await axios.post("/api/user/users", formDataObj, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const { data } = response;
+      localStorage.setItem("companyToken", data.token);
+      localStorage.setItem(
+        "companyDetails",
+        JSON.stringify(data.companyDetails)
+      );
+
+      setSuccessMessage("Registration successful! Redirecting...");
+      setTimeout(() => (window.location.href = "/"), 3000);
+    } catch (error) {
+      setErrorMessage(
+        error.response?.data?.message ||
+          "Registration failed. Please try again."
+      );
+      setTimeout(() => setErrorMessage(""), 5000);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validate the form
     const errors = validateForm();
     setValidationErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      handleRegister();
+    }
   };
 
   return (
@@ -60,9 +115,6 @@ const RegisterForm = () => {
     >
       <div className="w-100" style={{ maxWidth: "800px" }}>
         <h2 className="text-center mb-4">Register</h2>
-        <br />
-
-        {/* Registration Form */}
         <Form onSubmit={handleSubmit} noValidate>
           {/* Name Input */}
           <Form.Group controlId="formName" className="mb-3">
@@ -145,7 +197,6 @@ const RegisterForm = () => {
                 value="Male"
                 checked={formData.gender === "Male"}
                 onChange={handleChange}
-                isInvalid={!!validationErrors.gender}
               />
               <Form.Check
                 inline
@@ -156,7 +207,6 @@ const RegisterForm = () => {
                 value="Female"
                 checked={formData.gender === "Female"}
                 onChange={handleChange}
-                isInvalid={!!validationErrors.gender}
               />
               <Form.Check
                 inline
@@ -167,7 +217,6 @@ const RegisterForm = () => {
                 value="Other"
                 checked={formData.gender === "Other"}
                 onChange={handleChange}
-                isInvalid={!!validationErrors.gender}
               />
               {validationErrors.gender && (
                 <div className="text-danger">{validationErrors.gender}</div>
@@ -213,6 +262,17 @@ const RegisterForm = () => {
             </Col>
           </Row>
 
+          {/* Profile Picture Preview */}
+          {previewPic && (
+            <div className="text-center mb-3">
+              <img
+                src={previewPic}
+                alt="Profile Preview"
+                style={{ width: "100px", height: "100px", borderRadius: "50%" }}
+              />
+            </div>
+          )}
+
           {/* Password Input */}
           <Form.Group controlId="formPassword" className="mb-3">
             <Form.Control
@@ -247,13 +307,12 @@ const RegisterForm = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          {/* Submit Button */}
+          {/* Create Account Button */}
           <Button
-            type="submit"
             variant="primary"
             className="w-100 p-3"
             style={{ backgroundColor: "#144B7D", border: "none" }}
-            disabled={loading}
+            type="submit"
           >
             {loading ? (
               <>
@@ -264,12 +323,36 @@ const RegisterForm = () => {
                   role="status"
                   aria-hidden="true"
                 />
-                {" Registering..."}
+                {" Creating Account..."}
               </>
             ) : (
               "CREATE ACCOUNT"
             )}
           </Button>
+
+          {/* Display Error Message */}
+          {errorMessage && (
+            <Alert
+              variant="danger"
+              onClose={() => setErrorMessage("")}
+              dismissible
+              className="mt-3"
+            >
+              {errorMessage}
+            </Alert>
+          )}
+
+          {/* Display Success Message */}
+          {successMessage && (
+            <Alert
+              variant="success"
+              onClose={() => setSuccessMessage("")}
+              dismissible
+              className="mt-3"
+            >
+              {successMessage}
+            </Alert>
+          )}
         </Form>
 
         {/* Sign In Section */}
