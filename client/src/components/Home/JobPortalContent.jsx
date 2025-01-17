@@ -9,24 +9,36 @@ const JobPortalContent = () => {
   const [jobCategories, setJobCategories] = useState([]);
 
   useEffect(() => {
-    fetch('/data.json')
+    // Fetch the latest jobs from the API
+    fetch('http://localhost:8083/job/jobs')
       .then((response) => response.json())
       .then((data) => {
-        setAdvertisements(data.advertisements); 
-        setHiringCompanies(data.hiringCompanies); 
-        setJobCategories(data.jobCategories);
+        // Sort by created date and get the latest 6
+        const latestJobs = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6);
+        setAdvertisements(latestJobs);
       })
-      .catch((error) => console.error('Error loading data:', error));
+      .catch((error) => console.error('Error loading job data:', error));
+
+    // Example data for hiringCompanies and jobCategories
+    setHiringCompanies([
+      { name: 'Company A', jobPosts: 20 },
+      { name: 'Company B', jobPosts: 15 },
+    ]);
+
+    setJobCategories([
+      { name: 'IT', jobPosts: 50 },
+      { name: 'Engineering', jobPosts: 30 },
+    ]);
   }, []);
 
   return (
     <div className="container mt-5">
-      {/* Premium Advertisements Section */}
+      {/* Latest Advertisements Section */}
       <section>
         <h3 className="mb-4">Latest Advertisements</h3>
         <div className="row">
-          {advertisements.map((ad, index) => (
-            <LatestAdvertisementCard key={index} advertisement={ad} />
+          {advertisements.map((ad) => (
+            <LatestAdvertisementCard key={ad.id} advertisement={ad} />
           ))}
         </div>
       </section>
@@ -52,9 +64,7 @@ const JobPortalContent = () => {
             />
           ))}
         </div>
-      </section>  
-      <br />
-      <br />
+      </section>
     </div>
   );
 };

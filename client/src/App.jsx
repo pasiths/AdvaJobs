@@ -11,10 +11,10 @@ import UserLoginPage from './pages/UserLoginPage';
 import CompanyLoginPage from './pages/CompanyLoginPage';
 import UserRegisterPage from './pages/UserRegisterPage';
 import CompanyRegisterPage from './pages/CompanyRegisterPage';
-import JobDetailPage from './pages/JobDetailPage';
 import JobApplicationPage from './pages/JobApplicationPage';
 import UserProfilePage from './pages/UserProfilePage';
 import ContactUs from './pages/ContactUsPage';
+import JobDetail from './pages/JobDetailPage';
 
 
 function App() {
@@ -32,8 +32,8 @@ function App() {
       <Route path="/companylogin" element={<CompanyLoginPage />} />
       <Route path="/register" element={<UserRegisterPage />} />
       <Route path="/companyregister" element={<CompanyRegisterPage />} />
-      <Route path="/jobdetail" element={<JobDetailPage />} />
-      <Route path="/applypage" element={<JobApplicationPage />} />
+      <Route path="/jobs/:jobId" element={<JobDetail />} />
+      <Route path="/applypage/:jobId" element={<JobApplicationPage />} />
       <Route path="/profile" element={<UserProfilePage />} />
       <Route path="/contact" element={<ContactUs />} />
     
