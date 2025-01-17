@@ -3,8 +3,11 @@ package com.example.company_service.controller;
 import com.example.company_service.data.Company;
 import com.example.company_service.dto.LoginRequestDto;
 import com.example.company_service.service.CompanyService;
+import com.example.company_service.utils.TokenUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,8 +88,18 @@ public class CompanyController {
 
     // New endpoint for creating a company
     @PostMapping(path = "/companies")
-    public Company createCompany(@RequestBody Company company) {
-        return obj.createCompany(company);
+    public ResponseEntity<Company> createCompany(@RequestBody Company company, HttpServletResponse response) {
+        Company comp = obj.createCompany(company);
+
+        String token = TokenUtil.generateToken(comp.getId(), comp.getIsVerified().toString(), "company");
+
+        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(true).secure(true).path("/")
+                .maxAge(3600) // 1 hour
+                .build();
+
+        response.setHeader("Set-Cookie", cookie.toString());
+
+        return ResponseEntity.ok(comp);
     }
 
     // @PutMapping (path = "/companies/{id}")
@@ -108,9 +121,18 @@ public class CompanyController {
     }
 
     @PostMapping("/companies/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequest) {
-        String token = obj.login(loginRequest.getEmail(), loginRequest.getPassword());
-        return ResponseEntity.ok(token);
+    public ResponseEntity<Company> login(@RequestBody LoginRequestDto loginRequest, HttpServletResponse response) {
+        Company company = obj.login(loginRequest);
+
+        String token = TokenUtil.generateToken(company.getId(), company.getIsVerified().toString(), "company");
+
+        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(true).secure(true).path("/")
+                .maxAge(3600) // 1 hour
+                .build();
+
+        response.setHeader("Set-Cookie", cookie.toString());
+
+        return ResponseEntity.ok(company);
     }
 
 }

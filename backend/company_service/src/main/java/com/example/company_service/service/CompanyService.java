@@ -2,6 +2,7 @@ package com.example.company_service.service;
 
 import com.example.company_service.data.Company;
 import com.example.company_service.data.CompanyRepository;
+import com.example.company_service.dto.LoginRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,9 +28,9 @@ public class CompanyService {
     }
 
 
-    public String login(String email, String password) {
+    public Company login(LoginRequestDto loginRequest) {
         // Fetch company by email
-        Company company = cmpRepo.findByEmail(email)
+        Company company = cmpRepo.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
 
         // Check if the account is active
@@ -38,12 +39,12 @@ public class CompanyService {
         }
 
         // Verify password
-        if (!passwordEncoder.matches(password, company.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), company.getPassword())) {
             throw new RuntimeException("Invalid email or password");
         }
 
         // Generate token (pseudo-implementation, replace with JWT or session token logic)
-        return "Login successful. Token: " + generateToken(email);
+        return company;
     }
 
     private String generateToken(String email) {
