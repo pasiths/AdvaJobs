@@ -1,8 +1,7 @@
-package com.user.user_service.utils;
+package com.example.company_service.utils;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
@@ -19,7 +18,7 @@ public class TokenUtil {
 
     public static String generateToken(int userId, String isVerified, String role) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId);
+        claims.put("companyId", userId);
         claims.put("isVerified", isVerified);
         claims.put("role", role);
         return Jwts.builder().setClaims(claims)
