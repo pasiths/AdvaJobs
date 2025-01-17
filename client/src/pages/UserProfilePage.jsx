@@ -170,7 +170,7 @@ const UserProfile = ({ userData }) => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:8081/user/users/logout", null, {
+      await axios.post("/api/user/users/logout", null, {
         headers: {
           Authorization: `Bearer ${cookies.auth_token}`, // Include the auth token if required
         },
