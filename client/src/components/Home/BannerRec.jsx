@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 const Banner = () => {
     return (
-        <div className="banner d-flex justify-content-center align-items-center" style={{ height: '40vh', width: '100%' }}>
+        <div className="banner d-flex justify-content-center align-items-center" style={{ height: '50vh', width: '100%' }}>
             <div className="banner d-flex justify-content-center align-items-center" style={{ height: '40vh', width: '60%' }}>
                 <div className="banner-content text-center">
                     <h1>Welcome to AdvaJobs!</h1>
