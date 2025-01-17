@@ -49,7 +49,7 @@ public class UserController {
 
         String token = TokenUtil.generateToken(user.getId(), user.getIsVerified().toString(), "user");
 
-        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(true).secure(true).path("/")
+        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(false).secure(true).path("/")
                 .maxAge(3600) // 1 hour
                 .build();
 
@@ -66,7 +66,7 @@ public class UserController {
 
         String token = TokenUtil.generateToken(user.getId(), user.getIsVerified().toString(), "user");
 
-        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(true).secure(true).path("/")
+        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(false).secure(true).path("/")
                 .maxAge(3600) // 1 hour
                 .build();
 

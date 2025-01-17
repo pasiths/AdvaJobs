@@ -93,7 +93,7 @@ public class CompanyController {
 
         String token = TokenUtil.generateToken(comp.getId(), comp.getIsVerified().toString(), "company");
 
-        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(true).secure(true).path("/")
+        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(false).secure(true).path("/")
                 .maxAge(3600) // 1 hour
                 .build();
 
@@ -126,7 +126,7 @@ public class CompanyController {
 
         String token = TokenUtil.generateToken(company.getId(), company.getIsVerified().toString(), "company");
 
-        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(true).secure(true).path("/")
+        ResponseCookie cookie = ResponseCookie.from("auth_token", token).httpOnly(false).secure(true).path("/")
                 .maxAge(3600) // 1 hour
                 .build();
 
