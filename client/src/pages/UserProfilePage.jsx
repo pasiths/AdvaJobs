@@ -5,7 +5,6 @@ import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
-
 const UserProfile = ({ userData }) => {
   const [profileData, setProfileData] = useState(
     userData || {
@@ -39,7 +38,6 @@ const UserProfile = ({ userData }) => {
   const fetchUserDetails = async (id) => {
     try {
       const response = await axios.get(`/api/user/users/${id}`);
-      console.log("User Details Response:", response.data);
       const user = response.data;
 
       setProfileData({
@@ -64,7 +62,6 @@ const UserProfile = ({ userData }) => {
     if (tokenFromCookies) {
       const decodedToken = decodeJWT(tokenFromCookies);
       const id = decodedToken?.userId;
-      console.log("User ID from JWT:", id);
       if (id) {
         fetchUserDetails(id);
       }
