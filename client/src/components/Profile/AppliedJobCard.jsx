@@ -7,11 +7,6 @@ const AppliedJobCard = ({ jobTitle, companyName, timeAgo, location }) => {
       <Card.Body className="d-flex align-items-center justify-content-between">
         <div className="d-flex align-items-center">
           {/* Placeholder for logo */}
-          <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" 
-            alt={companyName} 
-            style={{ width: '50px', marginRight: '15px' }} 
-          />
           <div>
             <h6 className="mb-1" style={{ color: '#144B7D' }}>{jobTitle}</h6>
             <small style={{ color: '#555' }}>{companyName}</small><br />

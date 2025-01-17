@@ -17,7 +17,7 @@ const ContactUs = () => {
     return (
         <Container
             className="d-flex justify-content-center align-items-center"
-            style={{ minHeight: '80vh', backgroundColor: '#f9f9f9', padding: '40px 0' }}
+            style={{ minHeight: '80vh', padding: '40px 0' }}
         >
             <Row className="w-100" style={{ maxWidth: '800px' }}>
                 <Col className="p-5 bg-white rounded shadow-sm">
