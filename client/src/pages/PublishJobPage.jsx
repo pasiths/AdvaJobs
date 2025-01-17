@@ -3,19 +3,60 @@ import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 
 function PostJob() {
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Logic to handle form submission (e.g., API call)
-    
-    // Show success message after form submission
-    setShowSuccess(true);
+
+    const form = event.target;
+    const jobData = {
+      title: form.formPostTitle.value,
+      location: form.formLocation.value,
+      closeDate: form.formCloseDate.value,
+      description: form.formDescription.value,
+      phone: form.formPhone.value,
+      email: form.formEmail.value,
+      content: form.formContent.value,
+      jobType: form.formJobType.value,
+      salary: parseFloat(form.formSalary.value),
+      status: "Active",
+      company_Name: "TechCorp Inc.",
+      company_Id: 101,
+      createdAt: new Date().toISOString(),
+      updatedAt: null
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/api/jobs/jobs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jobData),
+      });
+
+      if (response.ok) {
+        setShowSuccess(true);
+        setShowError(false);
+        form.reset();
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || "Failed to post job.");
+        setShowSuccess(false);
+        setShowError(true);
+      }
+    } catch (error) {
+      setErrorMessage(error.message || "An unexpected error occurred.");
+      setShowSuccess(false);
+      setShowError(true);
+    }
   };
 
   return (
     <Container className="mt-5">
       <h2 className="text-center">Post Job</h2>
-      
+
       <Form onSubmit={handleSubmit}>
         {/* Post Title */}
         <Form.Group controlId="formPostTitle" className="mb-3">
@@ -57,6 +98,24 @@ function PostJob() {
           </Col>
         </Row>
 
+        {/* Job Type */}
+        <Form.Group controlId="formJobType" className="mb-3">
+          <Form.Label>Job Type</Form.Label>
+          <Form.Control as="select" required>
+            <option value="">Select job type</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Contract">Contract</option>
+            <option value="Freelance">Freelance</option>
+          </Form.Control>
+        </Form.Group>
+
+        {/* Salary */}
+        <Form.Group controlId="formSalary" className="mb-3">
+          <Form.Label>Salary</Form.Label>
+          <Form.Control type="number" placeholder="Enter salary" step="0.01" required />
+        </Form.Group>
+
         {/* Content */}
         <Form.Group controlId="formContent" className="mb-3">
           <Form.Label>Content</Form.Label>
@@ -74,6 +133,13 @@ function PostJob() {
       {showSuccess && (
         <Alert variant="success" className="mt-3">
           Job posted successfully!
+        </Alert>
+      )}
+
+      {/* Error Message */}
+      {showError && (
+        <Alert variant="danger" className="mt-3">
+          {errorMessage}
         </Alert>
       )}
     </Container>
