@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { Button, Container, Form, Alert, Spinner } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const CompanyRegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -277,9 +278,9 @@ const CompanyRegisterPage = () => {
         <div className="text-center mt-4">
           <p className="text-muted">
             Already have an Account?{" "}
-            <a href="loginRec" className="text-primary">
-              Sign In
-            </a>
+            <Link to='/companylogin'>Sign In</Link>
+              
+            
           </p>
         </div>
       </div>

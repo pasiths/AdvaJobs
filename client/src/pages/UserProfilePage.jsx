@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import JobCard from '../components/Profile/AppliedJobCard'; // Assuming the JobCard component is created.
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const UserProfile = ({ userData }) => {
     const [profileData] = useState(userData || {
