@@ -29,7 +29,6 @@ function HomePage() {
       const role = decodedToken?.role;
       if (role === "company") {
         setRole(role);
-        console.log("User ID from JWT:", role);
       }
     }
   }, [cookies.auth_token]);
