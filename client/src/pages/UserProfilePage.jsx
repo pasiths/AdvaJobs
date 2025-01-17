@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import JobCard from "../components/Profile/AppliedJobCard";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = ({ userData }) => {
   const [profileData, setProfileData] = useState(
@@ -20,11 +21,14 @@ const UserProfile = ({ userData }) => {
 
   const [cv, setCv] = useState(null); // State to hold the CV file
   const [authToken, setAuthToken] = useState(null); // Initialize authToken as null
-  const [cookies] = useCookies(["auth_token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["auth_token"]);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(null);
   const [updateError, setUpdateError] = useState(null);
+  const navigate = useNavigate(); // Ensure this is defined within the component
+
+  
 
   const decodeJWT = (auth_token) => {
     if (auth_token) {
@@ -164,6 +168,21 @@ const UserProfile = ({ userData }) => {
     });
   };
 
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:8081/user/users/logout", null, {
+        headers: {
+          Authorization: `Bearer ${cookies.auth_token}`, // Include the auth token if required
+        },
+      });
+      removeCookie("auth_token", { path: "/" });
+      navigate("/");
+      console.log("Logout successful!");
+    } catch (error) {
+      console.error("Error during logout:", error.response?.data || error.message);
+    }
+  };
+
   return (
     <Container
       fluid
@@ -281,6 +300,9 @@ const UserProfile = ({ userData }) => {
 
           {updateSuccess && <Alert variant="success" className="mt-3">{updateSuccess}</Alert>}
           {updateError && <Alert variant="danger" className="mt-3">{updateError}</Alert>}
+
+          <hr />
+          <Button style={{ backgroundColor: "#880808 ", border: "none" }} onClick={handleLogout}>Log Out</Button>
         </Col>
 
         <Col
