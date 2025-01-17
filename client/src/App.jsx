@@ -3,7 +3,12 @@ import Navbar from "./components/Navigation/NavScrollExample";
 import NavbarLogged from "./Components/Navigation/NavbarLogged";
 import CompanyProfilePage from "./Pages/CompanyProfilePage";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Footer from "./components/Navigation/Footer";
 import Home from "./Pages/HomePage";
 import PublishJobPage from "./pages/PublishJobPage";
@@ -32,9 +37,35 @@ function App() {
     setTimeout(() => setIsLoading(false), 500);
   }, [cookies.auth_token]);
 
+  if (authToken) {
+    return (
+      <Router>
+        <NavbarLogged />
+        <hr />
+        <hr />
+        <hr />
+        <hr />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/publishjob" element={<PublishJobPage />} />
+          <Route path="/jobs" element={<JobsPage />} />
+          <Route path="/jobs/:jobId" element={<JobDetail />} />
+          <Route path="/applypage/:jobId" element={<JobApplicationPage />} />
+          <Route path="/profile" element={<UserProfilePage />} />
+          <Route path="/cprofile" element={<CompanyProfilePage />} />
+          <Route path="/contact" element={<ContactUs />} />
+
+          {/* Catch-all route for 404 */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+        <Footer />
+      </Router>
+    );
+  }
+
   return (
     <Router>
-      {!authToken ? <Navbar /> : <NavbarLogged />}
+      <Navbar />
       <hr />
       <hr />
       <hr />
@@ -49,10 +80,9 @@ function App() {
         <Route path="/companyregister" element={<CompanyRegisterPage />} />
         <Route path="/jobs/:jobId" element={<JobDetail />} />
         <Route path="/applypage/:jobId" element={<JobApplicationPage />} />
-        <Route path="/profile" element={<UserProfilePage />} />
-        <Route path="/cprofile" element={<CompanyProfilePage />} />
-
         <Route path="/contact" element={<ContactUs />} />
+        {/* Catch-all route for 404 */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />
     </Router>
