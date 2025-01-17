@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import JobCard from '../components/Profile/AppliedJobCard'; // Assuming the JobCard component is created.
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const UserProfile = ({ userData }) => {
     const [profileData] = useState(userData || {
@@ -9,8 +10,11 @@ const UserProfile = ({ userData }) => {
         location: 'New York, USA',
         phone_num: '+1 234 567 890',
         gender: 'Male',
-        profile_pic: 'https://via.placeholder.com/150', // Example profile picture URL
+        profile_pic: 'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=150', // Example profile picture URL
     });
+
+    const [cv, setCv] = useState(null); // State to hold the CV file
+    const [cvName, setCvName] = useState('No CV Uploaded');
 
     const appliedJobs = [
         {
@@ -32,6 +36,14 @@ const UserProfile = ({ userData }) => {
             location: 'Menlo Park, CA',
         },
     ];
+
+    const handleCvChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setCv(file);
+            setCvName(file.name);
+        }
+    };
 
     return (
         <Container
@@ -85,13 +97,10 @@ const UserProfile = ({ userData }) => {
                         </p>
                     </div>
 
+                    {/* Navigate to Edit Profile Page */}
                     <Button
-                        variant="primary"
-                        className="w-100 mt-4"
-                        style={{
-                            backgroundColor: '#144B7D',
-                            border: 'none',
-                        }}
+                        className="btn btn-primary w-100 mt-4"
+                        style={{ backgroundColor: '#144B7D', border: 'none' }}
                     >
                         Edit Profile
                     </Button>
@@ -115,6 +124,19 @@ const UserProfile = ({ userData }) => {
                             location={job.location}
                         />
                     ))}
+
+                    {/* CV Upload Section */}
+                    <div className="mt-4">
+                        <h5>Upload CV</h5>
+                        <Form.Group controlId="cvUpload" className="mb-3">
+                            <Form.Control
+                                type="file"
+                                accept=".pdf, .docx, .doc"
+                                onChange={handleCvChange}
+                            />
+                            <small>{cvName}</small>
+                        </Form.Group>
+                    </div>
                 </Col>
             </Row>
         </Container>
