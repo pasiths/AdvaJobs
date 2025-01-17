@@ -18,7 +18,7 @@ const JobPage = () => {
 
   useEffect(() => {
     // Fetch jobs from API
-    fetch('http://localhost:8083/job/jobs')
+    fetch('/api/jobs/jobs')
       .then((response) => response.json())
       .then((data) => {
         setJobs(data); // Set the jobs state with the fetched data

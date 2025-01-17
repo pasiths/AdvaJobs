@@ -13,7 +13,7 @@ const JobApplicationPage = () => {
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8083/job/jobs/${jobId}`); // Replace with your API endpoint
+        const response = await axios.get(`/api/jobs/jobs/${jobId}`); // Replace with your API endpoint
         setJob(response.data);
       } catch (error) {
         console.error('Error fetching job details:', error);
