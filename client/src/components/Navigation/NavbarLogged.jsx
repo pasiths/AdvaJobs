@@ -24,6 +24,10 @@ function NavScrollExample() {
           </Nav>
           <Nav className="ms-auto">
             {/* Profile icon as an example */}
+            <Nav.Link as={NavLink} to="/cprofile">
+              CProfile
+              <i className="bi bi-person-circle ms-2" style={{ fontSize: '1.5rem' }}></i>
+            </Nav.Link>
             <Nav.Link as={NavLink} to="/profile">
               Profile
               <i className="bi bi-person-circle ms-2" style={{ fontSize: '1.5rem' }}></i>

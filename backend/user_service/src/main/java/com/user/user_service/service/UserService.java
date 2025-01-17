@@ -73,7 +73,7 @@ public class UserService {
 
         String otp = otpUtil.generateOtp(user.getEmail());
 
-        sendEmail.sendOtpEmail(user.getEmail(), otp);
+        //sendEmail.sendOtpEmail(user.getEmail(), otp);
 
         return userRepo.save(user);
     }
@@ -94,7 +94,7 @@ public class UserService {
         if (us.getIsVerified() == VerificationStatus.Unverified) {
             String otp = otpUtil.generateOtp(us.getEmail());
 
-            sendEmail.sendOtpEmail(us.getEmail(), otp);
+            //sendEmail.sendOtpEmail(us.getEmail(), otp);
         }
 
         return us;

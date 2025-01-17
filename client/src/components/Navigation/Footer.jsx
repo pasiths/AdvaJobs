@@ -29,7 +29,7 @@ const Footer = () => {
               <h5>Say Hello..!</h5>
               <p>
                 Email: advajobs@gmail.com<br />
-                Address: It has survived not only five centuries,<br />
+                Address: No 123 Alimankada Agunakolapelessa<br />
                 Phone: +94 77 123 4567
               </p>
             </div>

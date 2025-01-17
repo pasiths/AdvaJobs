@@ -1,6 +1,7 @@
 import "./App.css";
 import Navbar from "./components/Navigation/NavScrollExample";
 import NavbarLogged from "./Components/Navigation/NavbarLogged";
+import CompanyProfilePage from "./Pages/CompanyProfilePage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/Navigation/Footer";
@@ -49,6 +50,8 @@ function App() {
         <Route path="/jobs/:jobId" element={<JobDetail />} />
         <Route path="/applypage/:jobId" element={<JobApplicationPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
+        <Route path="/cprofile" element={<CompanyProfilePage />} />
+
         <Route path="/contact" element={<ContactUs />} />
       </Routes>
       <Footer />
