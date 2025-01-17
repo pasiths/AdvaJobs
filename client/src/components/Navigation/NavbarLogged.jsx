@@ -63,7 +63,7 @@ function NavScrollExample() {
             {/* Profile icon as an example */}
             {role ? (
               <Nav.Link as={NavLink} to="/cprofile">
-                Profile
+                Company Profile
                 <i
                   className="bi bi-person-circle ms-2"
                   style={{ fontSize: "1.5rem" }}
@@ -71,7 +71,7 @@ function NavScrollExample() {
               </Nav.Link>
             ) : (
               <Nav.Link as={NavLink} to="/profile">
-                Profile
+                User Profile
                 <i
                   className="bi bi-person-circle ms-2"
                   style={{ fontSize: "1.5rem" }}

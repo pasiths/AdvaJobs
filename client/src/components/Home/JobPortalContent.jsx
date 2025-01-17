@@ -46,16 +46,16 @@ const JobPortalContent = () => {
       </section>
 
       {/* Top Hiring Companies Section */}
-      <section className="mt-5">
+      {/* <section className="mt-5">
         <h3 className="mb-4">Top Hiring Companies</h3>
         <div className="row">
           {hiringCompanies.map((company, index) => (
             <TopHiringCompaniesCard key={index} company={company} />
           ))}
         </div>
-      </section>
+      </section> */}
 
-      <section className="mt-5">
+      {/* <section className="mt-5">
         <h3 className="mb-4">Job Categories</h3>
         <div className="row">
           {jobCategories.map((category, index) => (
@@ -66,7 +66,7 @@ const JobPortalContent = () => {
             />
           ))}
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };
