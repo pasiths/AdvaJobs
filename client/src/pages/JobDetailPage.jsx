@@ -30,6 +30,9 @@ const JobDetail = () => {
         <Col md={8}>
           <h2>{`${job.company_Name || 'Unknown Company'}`}</h2>
           <p className="mt-4">{job.description}</p>
+          <hr></hr>
+          <h5>Salary</h5>
+          <p className="mt-4">Rs. {job.salary}</p>
         </Col>
 
         {/* Right side - Job Details and Apply Section */}

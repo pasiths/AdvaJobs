@@ -13,39 +13,38 @@ const JobPage = () => {
     jobType: '',
     location: '',
   });
-  const [currentPage, setCurrentPage] = useState(1);  // Track current page
-  const jobsPerPage = 12;  // Number of jobs per page
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const jobsPerPage = 12; // Number of jobs per page
 
   useEffect(() => {
-    // Fetch jobs from JSON
+    // Fetch jobs from API
     fetch('http://localhost:8083/job/jobs')
-  .then((response) => response.json())
-  .then((data) => {
-    setJobs(data); // Directly set the array as the jobs state
-    setFilteredJobs(data); // Initially show all jobs
-  })
-  .catch((error) => console.error('Error loading jobs:', error));
-
+      .then((response) => response.json())
+      .then((data) => {
+        setJobs(data); // Set the jobs state with the fetched data
+        setFilteredJobs(data); // Initially show all jobs
+      })
+      .catch((error) => console.error('Error loading jobs:', error));
   }, []);
 
   useEffect(() => {
     // Apply the filters whenever the filter values change
-    let filtered = jobs;
+    let filtered = [...jobs]; // Use a copy to avoid modifying the original state
 
     // Filter by time
-    if (filters.time === 'Oldest First') {
+    if (filters.time === 'Newest First') {
+      filtered = filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else if (filters.time === 'Oldest First') {
       filtered = filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     }
 
     // Filter by salary
     if (filters.salary) {
       const [minSalary, maxSalary] = filters.salary.split('-').map(Number);
-      filtered = filtered.filter(
-        (job) => {
-          const [minJobSalary, maxJobSalary] = job.salary.split(' - ').map((s) => parseInt(s.replace('LKR', '').replace(',', '').trim()));
-          return minJobSalary >= minSalary && maxJobSalary <= maxSalary;
-        }
-      );
+      filtered = filtered.filter((job) => {
+        const jobSalary = parseFloat(job.salary); // Parse salary from the job
+        return jobSalary >= minSalary && (maxSalary ? jobSalary <= maxSalary : true);
+      });
     }
 
     // Filter by job type
@@ -54,12 +53,12 @@ const JobPage = () => {
     }
 
     // Filter by location (In country filter)
-    if (selectedLocation && filters.location) {
-      filtered = filtered.filter((job) => job.location.includes(filters.location));
+    if (selectedLocation) {
+      filtered = filtered.filter((job) => job.location.toLowerCase().includes('in the country'));
     }
 
     setFilteredJobs(filtered);
-  }, [filters, selectedLocation, jobs]); // Run whenever filters or location change
+  }, [filters, selectedLocation, jobs]); // Run whenever filters, location, or jobs change
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -86,7 +85,7 @@ const JobPage = () => {
             selectedLocation={selectedLocation}
             setSelectedLocation={setSelectedLocation}
             onFilterChange={handleFilterChange}
-            filters={filters} // Passing the current filters to Filter component
+            filters={filters} // Pass the current filters to the Filter component
           />
         </Col>
 
@@ -97,17 +96,17 @@ const JobPage = () => {
 
             {/* Pagination buttons at the top */}
             <div>
-              <Button 
-                variant="light" 
-                className="me-1" 
-                onClick={() => handlePageChange(currentPage - 1)} 
+              <Button
+                variant="light"
+                className="me-1"
+                onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
                 {'<'}
               </Button>
-              <Button 
-                variant="light" 
-                onClick={() => handlePageChange(currentPage + 1)} 
+              <Button
+                variant="light"
+                onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
                 {'>'}
@@ -125,19 +124,19 @@ const JobPage = () => {
 
           {/* Pagination buttons below */}
           <div className="d-flex justify-content-center mt-4">
-            <Button 
-              variant="light" 
-              onClick={() => handlePageChange(currentPage - 1)} 
+            <Button
+              variant="light"
+              onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
             >
               {'<'}
             </Button>
-            <Button 
-              variant="light" 
-              onClick={() => handlePageChange(currentPage + 1)} 
+            <Button
+              variant="light"
+              onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
             >
-               {'>'}
+              {'>'}
             </Button>
           </div>
         </Col>
