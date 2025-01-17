@@ -238,4 +238,30 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("/cv/{userId}")
+    public ResponseEntity<Resource> getUserCv(@PathVariable int userId) {
+        User user = userService.getUser(userId);
+        if (user.getCv() == null) {
+            throw new RuntimeException("No CV found for user with ID " + userId);
+        }
+
+        // Load the CV file
+        Path filePath = Paths.get(user.getCv());
+        Resource resource;
+        try {
+            resource = new UrlResource(filePath.toUri());
+            if (!resource.exists() || !resource.isReadable()) {
+                throw new RuntimeException("Could not read the file: " + user.getCv());
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error while reading file", e);
+        }
+
+        // Return the file as a response
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(resource);
+    }
+
 }
