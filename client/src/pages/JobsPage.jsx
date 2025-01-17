@@ -18,13 +18,14 @@ const JobPage = () => {
 
   useEffect(() => {
     // Fetch jobs from JSON
-    fetch('/data.json')
-      .then((response) => response.json())
-      .then((data) => {
-        setJobs(data.jobs); // Assuming "jobs" is the key in your JSON
-        setFilteredJobs(data.jobs); // Initially show all jobs
-      })
-      .catch((error) => console.error('Error loading jobs:', error));
+    fetch('http://localhost:8083/job/jobs')
+  .then((response) => response.json())
+  .then((data) => {
+    setJobs(data); // Directly set the array as the jobs state
+    setFilteredJobs(data); // Initially show all jobs
+  })
+  .catch((error) => console.error('Error loading jobs:', error));
+
   }, []);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const JobPage = () => {
 
     // Filter by time
     if (filters.time === 'Oldest First') {
-      filtered = filtered.sort((a, b) => new Date(a.timeAgo) - new Date(b.timeAgo));
+      filtered = filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     }
 
     // Filter by salary
