@@ -31,7 +31,6 @@ const UserProfile = ({ userData }) => {
     if (auth_token) {
       const [, payload] = auth_token.split(".");
       const decodedPayload = JSON.parse(atob(payload));
-      console.log("Decoded JWT Payload:", decodedPayload);
       return decodedPayload;
     }
     return null;
