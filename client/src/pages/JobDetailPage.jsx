@@ -8,7 +8,7 @@ const JobDetail = () => {
 
   useEffect(() => {
     // Fetch the job details based on jobId
-    fetch(`http://localhost:8083/job/jobs/${jobId}`)
+    fetch(`/api/jobs/jobs/${jobId}`)
       .then((response) => response.json())
       .then((data) => {
         setJob(data); // Set the fetched job data

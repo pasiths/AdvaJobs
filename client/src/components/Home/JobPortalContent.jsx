@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import LatestAdvertisementCard from './LatestAdvertisementCard';
-import TopHiringCompaniesCard from './TopHiringCompaniesCard';
-import JobCategoriesCard from './JobCategoriesCard';
+import { useState, useEffect } from "react";
+import LatestAdvertisementCard from "./LatestAdvertisementCard";
+import TopHiringCompaniesCard from "./TopHiringCompaniesCard";
+import JobCategoriesCard from "./JobCategoriesCard";
 
 const JobPortalContent = () => {
   const [advertisements, setAdvertisements] = useState([]);
@@ -10,24 +10,26 @@ const JobPortalContent = () => {
 
   useEffect(() => {
     // Fetch the latest jobs from the API
-    fetch('http://localhost:8083/job/jobs')
+    fetch("/api/jobs/jobs")
       .then((response) => response.json())
       .then((data) => {
         // Sort by created date and get the latest 6
-        const latestJobs = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6);
+        const latestJobs = data
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 6);
         setAdvertisements(latestJobs);
       })
-      .catch((error) => console.error('Error loading job data:', error));
+      .catch((error) => console.error("Error loading job data:", error));
 
     // Example data for hiringCompanies and jobCategories
     setHiringCompanies([
-      { name: 'Company A', jobPosts: 20 },
-      { name: 'Company B', jobPosts: 15 },
+      { name: "Company A", jobPosts: 20 },
+      { name: "Company B", jobPosts: 15 },
     ]);
 
     setJobCategories([
-      { name: 'IT', jobPosts: 50 },
-      { name: 'Engineering', jobPosts: 30 },
+      { name: "IT", jobPosts: 50 },
+      { name: "Engineering", jobPosts: 30 },
     ]);
   }, []);
 
