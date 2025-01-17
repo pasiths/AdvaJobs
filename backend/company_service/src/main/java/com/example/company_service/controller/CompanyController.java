@@ -4,6 +4,8 @@ import com.example.company_service.data.Company;
 import com.example.company_service.dto.LoginRequestDto;
 import com.example.company_service.service.CompanyService;
 import com.example.company_service.utils.TokenUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -133,6 +135,23 @@ public class CompanyController {
         response.setHeader("Set-Cookie", cookie.toString());
 
         return ResponseEntity.ok(company);
+    }
+
+    @PostMapping(path = "/companies/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+
+        // Clear cookies
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                cookie.setValue(null);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
+        }
+
+        return ResponseEntity.ok("Logged out successfully");
     }
 
 }

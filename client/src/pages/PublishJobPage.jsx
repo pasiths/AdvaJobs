@@ -73,7 +73,7 @@ function PostJob() {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/jobs/jobs", {
+      const response = await fetch("/api/jobs/jobs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

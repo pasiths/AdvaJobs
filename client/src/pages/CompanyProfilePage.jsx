@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import PostedJobCard from "../components/Profile/PostedJobCard"; // Replace with the actual component for posted job cards
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -13,13 +13,15 @@ const CompanyProfile = ({ companyData }) => {
       location: "Silicon Valley, USA",
       phone_num: "+1 987 654 3210",
       industry: "Software Development",
-      logo: "https://cdn.britannica.com/88/129488-050-6B1CA905/Internet-blue-screen-blog-society-history-media-2009.jpg", // Example profile picture URL
+      logo: "https://cdn.britannica.com/88/129488-050-6B1CA905/Internet-blue-screen-blog-society-history-media-2009.jpg",
     }
   );
 
-  const [authToken, setAuthToken] = useState(null); // Initialize authToken as null
+  const [isEditing, setIsEditing] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
+  const [authToken, setAuthToken] = useState(null);
   const [cookies] = useCookies(["auth_token"]);
-  const [isLoading, setIsLoading] = useState(true); // State to track loading
 
   const decodeJWT = (auth_token) => {
     if (auth_token) {
@@ -43,14 +45,13 @@ const CompanyProfile = ({ companyData }) => {
         logo: company.logo,
       });
     } catch (error) {
-      console.error("User Details Error:", error);
+      console.error("Company Details Error:", error);
     }
   };
 
   useEffect(() => {
     const tokenFromCookies = cookies.auth_token || null;
     setAuthToken(tokenFromCookies);
-    setTimeout(() => setIsLoading(false), 500);
 
     if (tokenFromCookies) {
       const decodedToken = decodeJWT(tokenFromCookies);
@@ -60,6 +61,62 @@ const CompanyProfile = ({ companyData }) => {
       }
     }
   }, [cookies.auth_token]);
+
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+    setCompanyProfileData({
+      ...companyProfileData,
+      [name]: value,
+    });
+  };
+
+  const handleSaveProfile = async () => {
+    if (!authToken) {
+      setUpdateError("User is not authenticated.");
+      return;
+    }
+
+    const decodedToken = decodeJWT(authToken);
+    const companyId = decodedToken?.companyId;
+
+    if (!companyId) {
+      setUpdateError("Company ID is missing.");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `/api/company/companies/${companyId}`,
+        companyProfileData
+      );
+
+      setUpdateSuccess("Profile updated successfully!");
+      setUpdateError(null);
+      setIsEditing(false);
+    } catch (error) {
+      setUpdateSuccess(null);
+      setUpdateError("Error updating profile. Please try again.");
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("/api/company/companies/logout", null, {
+        headers: {
+          Authorization: `Bearer ${cookies.auth_token}`, // Include the auth token if required
+        },
+      });
+      removeCookie("auth_token", { path: "/" });
+      navigate("/");
+      console.log("Logout successful!");
+    } catch (error) {
+      console.error("Error during logout:", error.response?.data || error.message);
+    }
+  };
 
   const postedJobs = [
     {
@@ -89,13 +146,11 @@ const CompanyProfile = ({ companyData }) => {
       style={{ minHeight: "80vh", backgroundColor: "#f9f9f9" }}
     >
       <Row className="w-100" style={{ maxWidth: "1200px" }}>
-        {/* Left Side - Company Details */}
         <Col
           md={5}
           className="p-5 bg-white rounded shadow-sm"
           style={{ borderRadius: "10px", marginRight: "20px" }}
         >
-          {/* Profile Picture */}
           <div className="text-center mb-4">
             <img
               src={companyProfileData.logo}
@@ -110,40 +165,94 @@ const CompanyProfile = ({ companyData }) => {
             />
           </div>
 
-          {/* Company Name */}
           <h2 className="text-center mb-4" style={{ color: "#144B7D" }}>
             {companyProfileData.company_name}
           </h2>
 
-          {/* Company Details */}
-          <div style={{ lineHeight: "2", fontSize: "1.1rem" }}>
-            <p>
-              <strong>Company Name:</strong> {companyProfileData.company_name}
-            </p>
-            <p>
-              <strong>Email:</strong> {companyProfileData.email}
-            </p>
-            <p>
-              <strong>Location:</strong> {companyProfileData.location}
-            </p>
-            <p>
-              <strong>Phone:</strong> {companyProfileData.phone_num}
-            </p>
-            <p>
-              <strong>Industry:</strong> {companyProfileData.industry}
-            </p>
-          </div>
+          <Form>
+            <Form.Group controlId="company_name">
+              <Form.Label>Company Name:</Form.Label>
+              <Form.Control
+                type="text"
+                name="company_name"
+                value={companyProfileData.company_name}
+                onChange={handleProfileChange}
+                disabled={!isEditing}
+              />
+            </Form.Group>
 
-          {/* Navigate to Edit Company Profile Page */}
-          <Button
-            className="btn btn-primary w-100 mt-4"
-            style={{ backgroundColor: "#144B7D", border: "none" }}
-          >
-            Edit Company Details
-          </Button>
+            <Form.Group controlId="email">
+              <Form.Label>Email:</Form.Label>
+              <Form.Control
+                type="email"
+                name="email"
+                value={companyProfileData.email}
+                onChange={handleProfileChange}
+                disabled={!isEditing}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="location">
+              <Form.Label>Location:</Form.Label>
+              <Form.Control
+                type="text"
+                name="location"
+                value={companyProfileData.location}
+                onChange={handleProfileChange}
+                disabled={!isEditing}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="phone_num">
+              <Form.Label>Phone:</Form.Label>
+              <Form.Control
+                type="text"
+                name="phone_num"
+                value={companyProfileData.phone_num}
+                onChange={handleProfileChange}
+                disabled={!isEditing}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="industry">
+              <Form.Label>Industry:</Form.Label>
+              <Form.Control
+                type="text"
+                name="industry"
+                value={companyProfileData.industry}
+                onChange={handleProfileChange}
+                disabled={!isEditing}
+              />
+            </Form.Group>
+
+            <Button
+              className="btn btn-primary w-100 mt-4"
+              style={{ backgroundColor: "#144B7D", border: "none" }}
+              onClick={isEditing ? handleSaveProfile : handleEditToggle}
+            >
+              {isEditing ? "Save Profile" : "Edit Profile"}
+            </Button>
+
+            {updateSuccess && (
+              <Alert variant="success" className="mt-3">
+                {updateSuccess}
+              </Alert>
+            )}
+            {updateError && (
+              <Alert variant="danger" className="mt-3">
+                {updateError}
+              </Alert>
+            )}
+            <hr />
+            <Button
+              style={{ backgroundColor: "#880808 ", border: "none" }}
+              onClick={handleLogout}
+            >
+              Log Out
+            </Button>
+          </Form>
         </Col>
 
-        {/* Right Side - Posted Job History */}
         <Col
           md={6}
           className="p-5 bg-white rounded shadow-sm"
@@ -161,7 +270,6 @@ const CompanyProfile = ({ companyData }) => {
             />
           ))}
 
-          {/* Post New Job Button */}
           <div className="mt-4 text-center">
             <Link to="/publishjob">
               <Button
