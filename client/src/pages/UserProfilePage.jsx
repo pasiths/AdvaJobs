@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import JobCard from "../components/Profile/AppliedJobCard"; // Assuming the JobCard component is created.
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
+import JobCard from "../components/Profile/AppliedJobCard";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
@@ -14,17 +13,18 @@ const UserProfile = ({ userData }) => {
       phone_num: "+1 234 567 890",
       gender: "Male",
       profile_pic:
-        "https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=150", // Example profile picture URL
+        "https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=150",
       ucv: "https://example.com/path/to/cv.pdf",
     }
   );
 
   const [cv, setCv] = useState(null); // State to hold the CV file
-  const [cvName, setCvName] = useState("No CV Uploaded");
-
   const [authToken, setAuthToken] = useState(null); // Initialize authToken as null
   const [cookies] = useCookies(["auth_token"]);
-  const [isLoading, setIsLoading] = useState(true); // State to track loading
+  const [isLoading, setIsLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
 
   const decodeJWT = (auth_token) => {
     if (auth_token) {
@@ -54,20 +54,6 @@ const UserProfile = ({ userData }) => {
     }
   };
 
-  useEffect(() => {
-    const tokenFromCookies = cookies.auth_token || null;
-    setAuthToken(tokenFromCookies);
-    setTimeout(() => setIsLoading(false), 500);
-
-    if (tokenFromCookies) {
-      const decodedToken = decodeJWT(tokenFromCookies);
-      const id = decodedToken?.userId;
-      if (id) {
-        fetchUserDetails(id);
-      }
-    }
-  }, [cookies.auth_token]);
-
   const appliedJobs = [
     {
       jobTitle: "Software Engineer",
@@ -89,12 +75,93 @@ const UserProfile = ({ userData }) => {
     },
   ];
 
+  useEffect(() => {
+    const tokenFromCookies = cookies.auth_token || null;
+    setAuthToken(tokenFromCookies);
+    setTimeout(() => setIsLoading(false), 500);
+
+    if (tokenFromCookies) {
+      const decodedToken = decodeJWT(tokenFromCookies);
+      const id = decodedToken?.userId;
+      if (id) {
+        fetchUserDetails(id);
+      }
+    }
+  }, [cookies.auth_token]);
+
   const handleCvChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setCv(file);
-      setCvName(file.name);
     }
+  };
+
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleSaveProfile = async () => {
+    if (!authToken) {
+      setUpdateError("User is not authenticated.");
+      return;
+    }
+  
+    const decodedToken = decodeJWT(authToken);
+    const userId = decodedToken?.userId;
+  
+    if (!userId) {
+      setUpdateError("User ID is missing.");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("fullName", profileData.full_name.trim());
+    formData.append("email", profileData.email.trim());
+    formData.append("location", profileData.location.trim());
+    formData.append("phoneNum", profileData.phone_num.trim());
+    formData.append("gender", profileData.gender.trim());
+  
+    if (cv) {
+      formData.append("cv", cv);
+    }
+  
+    try {
+      const response = await axios.put(`/api/user/users/${userId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      // Update profile data with the new CV URL from the response
+      if (cv) {
+        const updatedCvUrl = `/api/user/${response.data.cv.replace(/\\/g, "/")}`;
+        setProfileData((prevData) => ({
+          ...prevData,
+          ucv: updatedCvUrl,
+        }));
+      }
+  
+      setUpdateSuccess("Profile updated successfully!");
+      setUpdateError(null);
+      setIsEditing(false);
+    } catch (error) {
+      setUpdateSuccess(null);
+      if (error.response) {
+        console.error("Error updating profile:", error.response.data);
+        setUpdateError(error.response.data.message || "Unknown error occurred");
+      } else {
+        setUpdateError("Error updating profile. Please try again.");
+      }
+    }
+  };
+  
+
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData({
+      ...profileData,
+      [name]: value,
+    });
   };
 
   return (
@@ -104,13 +171,11 @@ const UserProfile = ({ userData }) => {
       style={{ minHeight: "80vh", backgroundColor: "#f9f9f9" }}
     >
       <Row className="w-100" style={{ maxWidth: "1200px" }}>
-        {/* Left Side - My Details */}
         <Col
           md={5}
           className="p-5 bg-white rounded shadow-sm"
           style={{ borderRadius: "10px", marginRight: "20px" }}
         >
-          {/* Profile Picture */}
           <div className="text-center mb-4">
             <img
               src={profileData.profile_pic}
@@ -125,40 +190,99 @@ const UserProfile = ({ userData }) => {
             />
           </div>
 
-          {/* Full Name */}
           <h2 className="text-center mb-4" style={{ color: "#144B7D" }}>
             {profileData.full_name}
           </h2>
 
-          {/* User Details */}
           <div style={{ lineHeight: "2", fontSize: "1.1rem" }}>
-            <p>
-              <strong>Full Name:</strong> {profileData.full_name}
-            </p>
-            <p>
-              <strong>Email:</strong> {profileData.email}
-            </p>
-            <p>
-              <strong>Location:</strong> {profileData.location}
-            </p>
-            <p>
-              <strong>Phone:</strong> {profileData.phone_num}
-            </p>
-            <p>
-              <strong>Gender:</strong> {profileData.gender}
-            </p>
+            <Form.Group controlId="full_name">
+              <Form.Label>Full Name:</Form.Label>
+              <Form.Control
+                type="text"
+                name="full_name"
+                value={profileData.full_name}
+                onChange={handleProfileChange}
+                disabled={!isEditing}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="email">
+              <Form.Label>Email:</Form.Label>
+              <Form.Control
+                type="email"
+                name="email"
+                value={profileData.email}
+                onChange={handleProfileChange}
+                disabled={!isEditing}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="location">
+              <Form.Label>Location:</Form.Label>
+              <Form.Control
+                type="text"
+                name="location"
+                value={profileData.location}
+                onChange={handleProfileChange}
+                disabled={!isEditing}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="phone_num">
+              <Form.Label>Phone:</Form.Label>
+              <Form.Control
+                type="text"
+                name="phone_num"
+                value={profileData.phone_num}
+                onChange={handleProfileChange}
+                disabled={!isEditing}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="gender">
+              <Form.Label>Gender:</Form.Label>
+              <Form.Control
+                type="text"
+                name="gender"
+                value={profileData.gender}
+                onChange={handleProfileChange}
+                disabled={!isEditing}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="cv">
+              <Form.Label>CV:</Form.Label>
+              {isEditing ? (
+                <Form.Control
+                  type="file"
+                  accept=".pdf, .docx, .doc"
+                  onChange={handleCvChange}
+                />
+              ) : (
+                <a
+                  href={profileData.ucv}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-link"
+                >
+                  Download CV
+                </a>
+              )}
+            </Form.Group>
           </div>
 
-          {/* Navigate to Edit Profile Page */}
           <Button
             className="btn btn-primary w-100 mt-4"
             style={{ backgroundColor: "#144B7D", border: "none" }}
+            onClick={isEditing ? handleSaveProfile : handleEditToggle}
           >
-            Edit Profile
+            {isEditing ? "Save Profile" : "Edit Profile"}
           </Button>
+
+          {updateSuccess && <Alert variant="success" className="mt-3">{updateSuccess}</Alert>}
+          {updateError && <Alert variant="danger" className="mt-3">{updateError}</Alert>}
         </Col>
 
-        {/* Right Side - Applied Job History */}
         <Col
           md={6}
           className="p-5 bg-white rounded shadow-sm"
@@ -176,19 +300,6 @@ const UserProfile = ({ userData }) => {
               location={job.location}
             />
           ))}
-
-          {/* CV Upload Section */}
-          <div className="mt-4">
-            <h5>Upload CV</h5>
-            <Form.Group controlId="cvUpload" className="mb-3">
-              <Form.Control
-                type="file"
-                accept=".pdf, .docx, .doc"
-                onChange={handleCvChange}
-              />
-              <small>{cvName}</small>
-            </Form.Group>
-          </div>
         </Col>
       </Row>
     </Container>

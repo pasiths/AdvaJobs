@@ -23,7 +23,7 @@ public class UpdateDto {
     private String location;
 
     @NotNull(message = "Gender is required")
-    @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be Male, Female, or Other")
+    @Pattern(regexp = "^(Male|Female|Other|MALE|FEMALE|OTHER)$", message = "Gender must be Male, Female, or Other")
     private String gender;
 
     private MultipartFile cv;
