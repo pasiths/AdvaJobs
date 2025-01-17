@@ -1,10 +1,55 @@
-import { useState } from 'react';
-import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
+import { useCookies } from "react-cookie";
 
 function PostJob() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [companyProfileData, setCompanyProfileData] = useState({
+    company_name: "Tech Solutions Inc.",
+  });
+
+  const [authToken, setAuthToken] = useState(null); // Initialize authToken as null
+  const [cookies] = useCookies(["auth_token"]);
+  const [isLoading, setIsLoading] = useState(true); // State to track loading
+
+  const decodeJWT = (auth_token) => {
+    if (auth_token) {
+      const [, payload] = auth_token.split(".");
+      const decodedPayload = JSON.parse(atob(payload));
+      return decodedPayload;
+    }
+    return null;
+  };
+
+  const fetchCompanyDetails = async (id) => {
+    try {
+      const response = await axios.get(`/api/company/companies/${id}`);
+      const company = response.data;
+      setCompanyProfileData({
+        company_name: company.name,
+      });
+    } catch (error) {
+      console.error("User Details Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    const tokenFromCookies = cookies.auth_token || null;
+    setAuthToken(tokenFromCookies);
+    setTimeout(() => setIsLoading(false), 500);
+
+    if (tokenFromCookies) {
+      const decodedToken = decodeJWT(tokenFromCookies);
+      const id = decodedToken?.companyId;
+      if (id) {
+        fetchCompanyDetails(id);
+      }
+    }
+  }, [cookies.auth_token]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,17 +66,17 @@ function PostJob() {
       jobType: form.formJobType.value,
       salary: parseFloat(form.formSalary.value),
       status: "Active",
-      company_Name: "TechCorp Inc.",
-      company_Id: 101,
+      company_Name: companyProfileData.company_name,
+      company_Id: decodeJWT(authToken)?.companyId,
       createdAt: new Date().toISOString(),
-      updatedAt: null
+      updatedAt: null,
     };
 
     try {
-      const response = await fetch('http://localhost:8080/api/jobs/jobs', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8080/api/jobs/jobs", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(jobData),
       });
@@ -79,7 +124,12 @@ function PostJob() {
         {/* Description */}
         <Form.Group controlId="formDescription" className="mb-3">
           <Form.Label>Description</Form.Label>
-          <Form.Control as="textarea" rows={3} placeholder="Enter job description" required />
+          <Form.Control
+            as="textarea"
+            rows={3}
+            placeholder="Enter job description"
+            required
+          />
         </Form.Group>
 
         {/* Phone and Email */}
@@ -87,7 +137,11 @@ function PostJob() {
           <Col>
             <Form.Group controlId="formPhone" className="mb-3">
               <Form.Label>Phone</Form.Label>
-              <Form.Control type="text" placeholder="Enter phone number" required />
+              <Form.Control
+                type="text"
+                placeholder="Enter phone number"
+                required
+              />
             </Form.Group>
           </Col>
           <Col>
@@ -113,19 +167,33 @@ function PostJob() {
         {/* Salary */}
         <Form.Group controlId="formSalary" className="mb-3">
           <Form.Label>Salary</Form.Label>
-          <Form.Control type="number" placeholder="Enter salary" step="0.01" required />
+          <Form.Control
+            type="number"
+            placeholder="Enter salary"
+            step="0.01"
+            required
+          />
         </Form.Group>
 
         {/* Content */}
         <Form.Group controlId="formContent" className="mb-3">
           <Form.Label>Content</Form.Label>
-          <Form.Control as="textarea" rows={5} placeholder="Enter additional content" required />
+          <Form.Control
+            as="textarea"
+            rows={5}
+            placeholder="Enter additional content"
+            required
+          />
         </Form.Group>
 
         {/* Buttons: Post and Cancel */}
         <div className="d-flex justify-content-end">
-          <Button variant="outline-secondary" className="me-2">Cancel</Button>
-          <Button variant="primary" type="submit">Post</Button>
+          <Button variant="outline-secondary" className="me-2">
+            Cancel
+          </Button>
+          <Button variant="primary" type="submit">
+            Post
+          </Button>
         </div>
       </Form>
 
